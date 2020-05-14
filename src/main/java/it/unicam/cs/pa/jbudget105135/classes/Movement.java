@@ -68,6 +68,6 @@ public class Movement implements IMovement {
 
     @Override
     public List<ITag> tags() {
-        return null;
+        return tags;
     }
 }

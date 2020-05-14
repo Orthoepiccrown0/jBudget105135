@@ -12,6 +12,7 @@ public class User implements IAccount {
     private final String email;
     private final double openingBalance;
 
+    private List<IMovement> movements;
     private String description;
 
     public User(UUID id, String name, String email, double openingBalance, String description) {
@@ -38,7 +39,6 @@ public class User implements IAccount {
         return email;
     }
 
-
     @Override
     public String getName() {
         return name;
@@ -46,7 +46,7 @@ public class User implements IAccount {
 
     @Override
     public String getDescription() {
-        return null;
+        return description;
     }
 
     @Override
@@ -56,11 +56,11 @@ public class User implements IAccount {
 
     @Override
     public double getOpeningBalance() {
-        return 0;
+        return openingBalance;
     }
 
     @Override
     public List<IMovement> getMovements() {
-        return null;
+        return movements;
     }
 }
