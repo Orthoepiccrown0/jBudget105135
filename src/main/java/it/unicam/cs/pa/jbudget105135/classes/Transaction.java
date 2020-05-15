@@ -9,10 +9,10 @@ import java.util.List;
 
 public class Transaction implements ITransaction {
 
-    private String ID;
-    private List<IMovement> movements;
-    private List<ITag> tags;
-    private Date date;
+    private final String ID;
+    private final List<IMovement> movements;
+    private final List<ITag> tags;
+    private final Date date;
 
     public Transaction(String ID, List<IMovement> movements, List<ITag> tags, Date date) {
         this.ID = ID;

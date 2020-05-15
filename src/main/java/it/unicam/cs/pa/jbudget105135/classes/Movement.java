@@ -11,14 +11,14 @@ import java.util.List;
 
 public class Movement implements IMovement {
 
-    private String ID;
-    private String description;
-    private double amount;
-    private MovementType type;
-    private List<ITag> tags;
-    private ITransaction transaction;
-    private IAccount account;
-    private Date date;
+    private final String ID;
+    private final String description;
+    private final double amount;
+    private final MovementType type;
+    private final List<ITag> tags;
+    private final ITransaction transaction;
+    private final IAccount account;
+    private final Date date;
 
     public Movement(String ID, String description, double amount, MovementType type, List<ITag> tags, ITransaction transaction, IAccount account, Date date) {
         this.ID = ID;

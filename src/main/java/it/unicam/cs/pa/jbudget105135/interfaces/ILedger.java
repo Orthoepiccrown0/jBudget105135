@@ -8,7 +8,7 @@ import java.util.List;
 public interface ILedger {
     List<IAccount> getAccounts();
 
-    boolean addTransaction(ITransaction ITransaction);
+    boolean addTransaction(ITransaction transaction);
 
     List<ITransaction> getTransactions();
 
@@ -18,7 +18,7 @@ public interface ILedger {
 
     boolean addTag(String name, String description);
 
-    boolean addScheduledTransaction(IScheduledTransaction IScheduledTransaction);
+    boolean addScheduledTransaction(IScheduledTransaction scheduledTransaction);
 
     boolean isScheduled(Date date);
 }

@@ -5,6 +5,8 @@ import java.util.List;
 
 public interface IScheduledTransaction {
     String getDescription();
+
     List<ITransaction> getTransaction(Date date);
+
     boolean isCompleted();
 }
