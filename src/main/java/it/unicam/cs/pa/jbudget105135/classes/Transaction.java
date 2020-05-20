@@ -6,6 +6,7 @@ import it.unicam.cs.pa.jbudget105135.interfaces.ITransaction;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class Transaction implements ITransaction {
 
@@ -21,6 +22,13 @@ public class Transaction implements ITransaction {
         this.date = date;
     }
 
+    public Transaction(List<IMovement> movements, List<ITag> tags, Date date) {
+        this.ID = UUID.randomUUID().toString();
+        this.movements = movements;
+        this.tags = tags;
+        this.date = date;
+    }
+
     @Override
     public String getID() {
         return ID;
@@ -30,6 +38,13 @@ public class Transaction implements ITransaction {
     public List<IMovement> getMovements() {
         return movements;
     }
+
+    @Override
+    public void addMovement(IMovement movement) {
+        movements.add(movement);
+    }
+
+
 
     @Override
     public List<ITag> getTags() {
@@ -49,5 +64,14 @@ public class Transaction implements ITransaction {
     @Override
     public Date getDate() {
         return date;
+    }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "ID='" + ID + '\'' +
+                ", tags=" + tags +
+                ", date=" + date +
+                '}';
     }
 }

@@ -8,6 +8,8 @@ public interface ITransaction {
 
     List<IMovement> getMovements();
 
+    void addMovement(IMovement movement);
+
     List<ITag> getTags();
 
     boolean addTag(ITag ITag);
