@@ -78,7 +78,7 @@ public class Ledger implements ILedger {
 
     @Override
     public boolean addTag(String name, String description) {
-        return tags.add(new Tag(name, description));
+        return tags.add(new Tag(name));
     }
 
     @Override

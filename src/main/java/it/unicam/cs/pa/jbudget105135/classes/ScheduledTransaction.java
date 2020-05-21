@@ -35,6 +35,11 @@ public class ScheduledTransaction implements ITransaction, IScheduledTransaction
     }
 
     @Override
+    public void addMovement(IMovement movement) {
+
+    }
+
+    @Override
     public List<ITag> getTags() {
         return null;
     }
