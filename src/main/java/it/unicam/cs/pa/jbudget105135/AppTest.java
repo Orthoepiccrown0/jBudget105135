@@ -2,7 +2,7 @@ package it.unicam.cs.pa.jbudget105135;
 
 import it.unicam.cs.pa.jbudget105135.classes.ConsoleView;
 import it.unicam.cs.pa.jbudget105135.classes.Ledger;
-import it.unicam.cs.pa.jbudget105135.classes.LedgerManager;
+import it.unicam.cs.pa.jbudget105135.classes.ConsoleLedgerManager;
 import it.unicam.cs.pa.jbudget105135.interfaces.ILedger;
 import it.unicam.cs.pa.jbudget105135.interfaces.ILedgerManager;
 import it.unicam.cs.pa.jbudget105135.interfaces.View;
@@ -35,7 +35,7 @@ public class AppTest<T extends ILedger> {
         HashMap<String, Consumer<? super ILedger>> commands = new HashMap<>();
         ILedger ledger = new Ledger();
         View view = new ConsoleView<>(ledger, commands);
-        ILedgerManager ledgerManager = new LedgerManager<>(ledger, commands);
+        ILedgerManager ledgerManager = new ConsoleLedgerManager<>(ledger, commands);
         return new AppTest(view, ledgerManager);
     }
 

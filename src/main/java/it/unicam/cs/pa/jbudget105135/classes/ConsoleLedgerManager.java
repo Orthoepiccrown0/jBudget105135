@@ -9,63 +9,47 @@ import java.io.InputStreamReader;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class ConsoleView<T extends ILedger> implements View {
-
+public class ConsoleLedgerManager<T extends ILedger> implements ILedgerManager {
+    private HashMap<String, Consumer<? super ILedger>> commands;
     private boolean isOn;
     private T ledger;
-    private  BufferedReader reader;
-    private HashMap<String, Consumer<? super ILedger>> commands;
+    private BufferedReader reader;
 
-    public ConsoleView(T ledger, HashMap<String, Consumer<? super ILedger>> commands) {
-        this.ledger = ledger;
+    public ConsoleLedgerManager(T ledger, HashMap<String, Consumer<? super ILedger>> commands) {
         this.commands = commands;
+        this.ledger = ledger;
         this.isOn = true;
         this.reader = new BufferedReader(new InputStreamReader(System.in));
-        this.commands.put("help", s -> printCommands());
-        this.commands.put("exit", s -> close());
-    }
-
-    public void printCommands() {
-        TreeSet<String> words = new TreeSet<>(commands.keySet());
-        String[] wordsArray = words.toArray(new String[]{});
-        System.out.println("Commands: " + Arrays.toString(wordsArray));
+        addSimpleFunctions();
     }
 
 
-    @Override
-    public void open(ILedgerManager ledgerManager) throws IOException {
-        welcome();
-        printCommands();
-        while (isOn) {
-            System.out.print("> ");
-            System.out.flush();
-            String command = reader.readLine();
-            ledgerManager.processCommand(command);
 
-        }
-        close();
+    private void addSimpleFunctions() {
+        this.commands.put("transactions", s -> showTransactions());
+        this.commands.put("newtransaction", s -> createNewTransaction());
+        this.commands.put("movements", s -> showMovements());
+        this.commands.put("newmovement", s -> showTransactions());
     }
 
     @Override
-    public void close() {
-        try {
-            isOn = false;
-            reader.close();
-        } catch (IOException e) {
-            goodbye();
+    public void processCommand(String command) {
+        Consumer<? super T> action = commands.get(command);
+        if (action == null) {
+            System.err.println("Unknown command: " + command);
+        } else {
+            action.accept(ledger);
         }
     }
 
-
-
-    private void goodbye() {
-        System.out.println("******************************");
+    @Override
+    public boolean isOn() {
+        return isOn;
     }
 
-    private void welcome() {
-        System.out.println("******************************");
-        System.out.println("*         jBudget 0.1         *");
-        System.out.println("******************************");
+    @Override
+    public Set<String> getCommandSet() {
+        return commands.keySet();
     }
 
     private void showTransactions() {
