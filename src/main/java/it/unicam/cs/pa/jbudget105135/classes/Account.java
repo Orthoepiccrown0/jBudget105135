@@ -6,6 +6,7 @@ import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 public class Account implements IAccount {
 
@@ -15,6 +16,7 @@ public class Account implements IAccount {
     private final String description;
     private final double openingBalance;
     private List<IMovement> movements;
+    private double balance;
 
     /**
      * restore account
@@ -48,7 +50,18 @@ public class Account implements IAccount {
         this.name = name;
         this.description = description;
         this.openingBalance = openingBalance;
+        this.balance = openingBalance;
         this.ID = UUID.randomUUID().toString();
+    }
+
+    @Override
+    public void increaseBy(double amount) {
+        balance += amount;
+    }
+
+    @Override
+    public void decreaseBy(double amount) {
+        balance -= amount;
     }
 
     @Override
@@ -72,8 +85,18 @@ public class Account implements IAccount {
     }
 
     @Override
+    public double getBalance() {
+        return balance;
+    }
+
+    @Override
     public List<IMovement> getMovements() {
         return movements;
+    }
+
+    @Override
+    public List<IMovement> getMovements(Predicate<IMovement> predicate) {
+        return null;
     }
 
     @Override
@@ -86,4 +109,15 @@ public class Account implements IAccount {
         return type;
     }
 
+    @Override
+    public String toString() {
+        return "Account{" +
+                "ID='" + ID + '\'' +
+                ", type=" + type +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", openingBalance=" + openingBalance +
+                ", balance=" + balance +
+                '}';
+    }
 }

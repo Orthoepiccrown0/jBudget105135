@@ -6,6 +6,7 @@ import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITag;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITransaction;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -21,6 +22,7 @@ public class Movement implements IMovement {
     private final IAccount account;
     private final Date date;
 
+    //restore constructor
     public Movement(String ID, String description, double amount, MovementType type, List<ITag> tags, ITransaction transaction, IAccount account, Date date) {
         this.ID = ID;
         this.description = description;
@@ -32,6 +34,7 @@ public class Movement implements IMovement {
         this.date = date;
     }
 
+    //new movement
     public Movement(String description, double amount, MovementType type, List<ITag> tags, ITransaction transaction, IAccount account, Date date) {
         this.ID = UUID.randomUUID().toString();
         this.description = description;
@@ -90,7 +93,7 @@ public class Movement implements IMovement {
                 ", description='" + description + '\'' +
                 ", amount=" + amount +
                 ", type=" + type +
-                ", tags=" + tags +
+                ", tags=" + Arrays.toString(tags.toArray()) +
                 ", account=" + account +
                 ", date=" + date +
                 '}';

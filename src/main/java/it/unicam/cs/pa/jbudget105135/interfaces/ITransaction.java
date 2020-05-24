@@ -10,11 +10,15 @@ public interface ITransaction {
 
     void addMovement(IMovement movement);
 
+    boolean removeMovement(IMovement movement);
+
     List<ITag> getTags();
 
     boolean addTag(ITag ITag);
 
     boolean removeTag(ITag ITag);
+
+    double getTotalAmount();
 
     Date getDate();
 

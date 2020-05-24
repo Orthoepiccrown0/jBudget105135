@@ -15,7 +15,6 @@ public class Tag implements ITag {
     }
 
 
-
     @Override
     public String getName() {
         return name;
@@ -24,5 +23,10 @@ public class Tag implements ITag {
     @Override
     public String getID() {
         return ID;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

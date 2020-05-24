@@ -4,6 +4,7 @@ import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITag;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITransaction;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -14,7 +15,16 @@ public class Transaction implements ITransaction {
     private final List<IMovement> movements;
     private final List<ITag> tags;
     private final Date date;
+    private double totalAmount = 0;
 
+    /**
+     * restore transaction
+     *
+     * @param ID
+     * @param movements
+     * @param tags
+     * @param date
+     */
     public Transaction(String ID, List<IMovement> movements, List<ITag> tags, Date date) {
         this.ID = ID;
         this.movements = movements;
@@ -22,6 +32,13 @@ public class Transaction implements ITransaction {
         this.date = date;
     }
 
+    /**
+     * create a new one
+     *
+     * @param movements
+     * @param tags
+     * @param date
+     */
     public Transaction(List<IMovement> movements, List<ITag> tags, Date date) {
         this.ID = UUID.randomUUID().toString();
         this.movements = movements;
@@ -44,6 +61,10 @@ public class Transaction implements ITransaction {
         movements.add(movement);
     }
 
+    @Override
+    public boolean removeMovement(IMovement movement) {
+        return movements.remove(movement);
+    }
 
 
     @Override
@@ -52,13 +73,26 @@ public class Transaction implements ITransaction {
     }
 
     @Override
-    public boolean addTag(ITag ITag) {
-        return false;
+    public boolean addTag(ITag tag) {
+        return tags.add(tag);
     }
 
     @Override
-    public boolean removeTag(ITag ITag) {
-        return false;
+    public boolean removeTag(ITag tag) {
+        return tags.remove(tag);
+    }
+
+    @Override
+    public double getTotalAmount() {
+        calculateTotalAmount();
+        return totalAmount;
+    }
+
+
+    private void calculateTotalAmount() {
+        for (IMovement move : movements) {
+            totalAmount += move.getAmount();
+        }
     }
 
     @Override
@@ -70,7 +104,8 @@ public class Transaction implements ITransaction {
     public String toString() {
         return "Transaction{" +
                 "ID='" + ID + '\'' +
-                ", tags=" + tags +
+                ", tags=" + Arrays.toString(tags.toArray()) +
+                ", totalAmount=" + totalAmount +
                 ", date=" + date +
                 '}';
     }

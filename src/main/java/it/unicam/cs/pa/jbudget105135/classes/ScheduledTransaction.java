@@ -40,6 +40,11 @@ public class ScheduledTransaction implements ITransaction, IScheduledTransaction
     }
 
     @Override
+    public boolean removeMovement(IMovement movement) {
+        return false;
+    }
+
+    @Override
     public List<ITag> getTags() {
         return null;
     }
@@ -52,6 +57,11 @@ public class ScheduledTransaction implements ITransaction, IScheduledTransaction
     @Override
     public boolean removeTag(ITag ITag) {
         return false;
+    }
+
+    @Override
+    public double getTotalAmount() {
+        return 0;
     }
 
     @Override
