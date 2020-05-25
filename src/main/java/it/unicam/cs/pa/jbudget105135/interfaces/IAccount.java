@@ -26,5 +26,7 @@ public interface IAccount {
 
     boolean addMovement(IMovement movement);
 
+    boolean removeMovement(IMovement movement);
+
     AccountType getType();
 }

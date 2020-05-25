@@ -14,30 +14,21 @@ public class BasicLedgerManager<T extends ILedger> implements ILedgerManager {
     private final HashMap<String, Consumer<? super ILedger>> commands;
     private final T ledger;
     private final BufferedReader reader;
-    private boolean isOn;
 
     public BasicLedgerManager(T ledger, HashMap<String, Consumer<? super ILedger>> commands) {
         this.commands = commands;
         this.ledger = ledger;
-        this.isOn = true;
         this.reader = new BufferedReader(new InputStreamReader(System.in));
-        this.commands.put("exit", s -> exit());
-        addSimpleFunctions();
+        addBasicFunctions();
     }
 
-    private void exit() {
-        isOn = false;
-    }
-
-
-    private void addSimpleFunctions() {
-        this.commands.put("transactions", s -> showTransactions());
+    private void addBasicFunctions() {
         this.commands.put("newtransaction", s -> createNewTransaction());
-        this.commands.put("movements", s -> showMovements());
-        this.commands.put("newmovement", s -> showTransactions());
-        this.commands.put("accounts", s -> showAccounts());
+        this.commands.put("newmovement", s -> createNewMovement());
         this.commands.put("newaccount", s -> addAccount());
+        this.commands.put("removetransaction", s -> removeTransaction());
     }
+
 
 
     @Override
@@ -51,27 +42,49 @@ public class BasicLedgerManager<T extends ILedger> implements ILedgerManager {
     }
 
     @Override
-    public boolean isOn() {
-        return isOn;
-    }
-
-    @Override
     public Set<String> getCommandSet() {
         return commands.keySet();
     }
 
-    private void showTransactions() {
-        if (ledger.getTransactions().size() != 0) {
-            printTransactions(ledger.getTransactions());
-        } else {
-            System.out.println("There are no transactions. Create new one!");
+    private void removeTransaction() {
+        try {
+            System.out.println("Insert ID of transaction you want to remove or \"back\" to return:");
+            String id = reader.readLine();
+            if(id.equals("back"))
+                return;
+            ITransaction transaction = findTransaction(id);
+            if(transaction!=null){
+                for (IMovement m:transaction.getMovements()) {
+                    for (IAccount acc:ledger.getAccounts()) {
+                        acc.removeMovement(m);
+                    }
+                }
+                ledger.removeTransaction(transaction);
+                System.out.println("Transaction was successfully remove");
+            }else{
+                System.out.println("Unable to find transaction");
+            }
+        }catch (Exception e){
+            System.out.println("Something went wrong");
         }
     }
 
-    private void printTransactions(List<ITransaction> transactions) {
-        System.out.println("Transactions: ");
-        for (ITransaction l : transactions) {
-            System.out.println(l.toString());
+    private void createNewMovement() {
+        try {
+            System.out.println("Insert ID of transaction where you want to insert new movement or \"back\" to return:");
+            for (ITransaction t : ledger.getTransactions())
+                System.out.println(t.toString());
+            String id = reader.readLine();
+            if (id.equals("back"))
+                return;
+            ITransaction transaction =  findTransaction(id);
+            if (transaction == null) {
+                System.out.println("Unable to find that transaction");
+            } else {
+                createMovement(transaction);
+            }
+        } catch (Exception e) {
+            System.out.println("Something went wrong");
         }
     }
 
@@ -108,48 +121,8 @@ public class BasicLedgerManager<T extends ILedger> implements ILedgerManager {
         return tagList;
     }
 
-    private void showMovements() {
-        try {
-            if (ledger.getTransactions().size() == 0) {
-                System.out.println("No transactions found. You can't access to movements without transaction.");
-                return;
-            }
-            System.out.println("Choose from which transaction we will show you movements." +
-                    " \nPlease insert transaction ID or \"back\" to return back: ");
-            String transactionCode = reader.readLine();
 
-            if (transactionCode.equals("back"))
-                return;
-
-            ITransaction transaction = findTransaction(transactionCode);
-            if (transaction != null) {
-                System.out.println("Movements of transaction with ID: " + transactionCode);
-                printMovements(transaction.getMovements());
-            } else
-                System.out.println("Unable to find that transaction, returning to main menu..");
-
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        }
-
-    }
-
-    private void printMovements(List<IMovement> movements) {
-        System.out.println("Movements: ");
-        for (IMovement movement : movements) {
-            System.out.println(movement.toString());
-        }
-    }
-
-    private ITransaction findTransaction(String transactionID) {
-        for (ITransaction transaction : ledger.getTransactions()) {
-            if (transaction.getID().equals(transactionID))
-                return transaction;
-        }
-        return null;
-    }
-
-    private void createMovement(Transaction transaction) {
+    private void createMovement(ITransaction transaction) {
         try {
             //check if list of accounts is not empty
             if (ledger.getAccounts().size() == 0)
@@ -180,6 +153,9 @@ public class BasicLedgerManager<T extends ILedger> implements ILedgerManager {
 
             IAccount account = chooseAccountAndCheckAffordable(selectedType, amount);
             Movement movement = new Movement(description, amount, selectedType, tags, transaction, account, transaction.getDate());
+            if (account != null) {
+                account.addMovement(movement);
+            }
             transaction.addMovement(movement);
             System.out.println("Do you want to add another movement? [Y/N]");
             String response = reader.readLine();
@@ -213,7 +189,7 @@ public class BasicLedgerManager<T extends ILedger> implements ILedgerManager {
             } else if (account.getType() == AccountType.LIABILITIES) {
                 account.increaseBy(amount);
             }
-        }else if(type == MovementType.CREDIT){
+        } else if (type == MovementType.CREDIT) {
             if (account.getType() == AccountType.ASSETS) {
                 account.increaseBy(amount);
             } else if (account.getType() == AccountType.LIABILITIES) {
@@ -268,15 +244,7 @@ public class BasicLedgerManager<T extends ILedger> implements ILedgerManager {
             System.out.println("Please, insert a valid number");
             return selectAccountType();
         }
-        return types[selectedType-1];
-    }
-
-    private void showAccounts() {
-        if (ledger.getAccounts().size() == 0)
-            System.out.println("No accounts available, create one!");
-        for (IAccount account : ledger.getAccounts()) {
-            System.out.println(account);
-        }
+        return types[selectedType - 1];
     }
 
     private void addAccount() {
@@ -287,5 +255,13 @@ public class BasicLedgerManager<T extends ILedger> implements ILedgerManager {
             System.out.println("Something went wrong, restarting");
             addAccount();
         }
+    }
+
+    private ITransaction findTransaction(String transactionID) {
+        for (ITransaction transaction : ledger.getTransactions()) {
+            if (transaction.getID().equals(transactionID))
+                return transaction;
+        }
+        return null;
     }
 }

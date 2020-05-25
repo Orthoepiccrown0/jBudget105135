@@ -7,8 +7,6 @@ public interface ILedgerManager {
 
     void processCommand(String command);
 
-    boolean isOn();
-
     Set<String> getCommandSet();
 
 }

@@ -62,6 +62,11 @@ public class Ledger implements ILedger {
     }
 
     @Override
+    public boolean removeTransaction(ITransaction transaction) {
+        return transactions.remove(transaction);
+    }
+
+    @Override
     public List<ITransaction> getTransactions() {
         return transactions;
     }

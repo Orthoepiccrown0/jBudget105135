@@ -105,7 +105,7 @@ public class Transaction implements ITransaction {
         return "Transaction{" +
                 "ID='" + ID + '\'' +
                 ", tags=" + Arrays.toString(tags.toArray()) +
-                ", totalAmount=" + totalAmount +
+                ", totalAmount=" + getTotalAmount() +
                 ", date=" + date +
                 '}';
     }

@@ -105,6 +105,11 @@ public class Account implements IAccount {
     }
 
     @Override
+    public boolean removeMovement(IMovement movement) {
+        return movements.remove(movement);
+    }
+
+    @Override
     public AccountType getType() {
         return type;
     }

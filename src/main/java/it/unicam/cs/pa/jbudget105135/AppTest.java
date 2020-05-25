@@ -34,7 +34,7 @@ public class AppTest<T extends ILedger> {
     private static AppTest createBasicLedger() {
         HashMap<String, Consumer<? super ILedger>> commands = new HashMap<>();
         ILedger ledger = new Ledger();
-        IView IView = new ConsoleIView<>(commands);
+        IView IView = new ConsoleIView<>(ledger,commands);
         ILedgerManager ledgerManager = new BasicLedgerManager<>(ledger, commands);
         return new AppTest(IView, ledgerManager);
     }

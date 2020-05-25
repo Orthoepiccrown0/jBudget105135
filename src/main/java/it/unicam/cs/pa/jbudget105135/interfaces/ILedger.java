@@ -10,6 +10,8 @@ public interface ILedger {
 
     boolean addTransaction(ITransaction transaction);
 
+    boolean removeTransaction(ITransaction transaction);
+
     List<ITransaction> getTransactions();
 
     List<ITag> getTags();
