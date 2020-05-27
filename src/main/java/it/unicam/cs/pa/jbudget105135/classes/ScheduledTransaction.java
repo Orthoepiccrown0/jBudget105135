@@ -15,6 +15,11 @@ public class ScheduledTransaction implements ITransaction, IScheduledTransaction
     }
 
     @Override
+    public void setDescription(String description) {
+
+    }
+
+    @Override
     public List<ITransaction> getTransaction(Date date) {
         return null;
     }

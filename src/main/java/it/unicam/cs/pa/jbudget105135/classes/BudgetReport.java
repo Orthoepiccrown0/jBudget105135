@@ -3,9 +3,11 @@ package it.unicam.cs.pa.jbudget105135.classes;
 import it.unicam.cs.pa.jbudget105135.interfaces.IBudget;
 import it.unicam.cs.pa.jbudget105135.interfaces.IBudgetReport;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITag;
+import it.unicam.cs.pa.jbudget105135.interfaces.ITransaction;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public class BudgetReport implements IBudgetReport {
 
@@ -31,5 +33,10 @@ public class BudgetReport implements IBudgetReport {
     @Override
     public double get() {
         return 0;
+    }
+
+    @Override
+    public Predicate<ITransaction> getPredicate() {
+        return null;
     }
 }

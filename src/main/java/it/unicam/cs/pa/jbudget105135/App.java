@@ -6,18 +6,20 @@ import it.unicam.cs.pa.jbudget105135.classes.BasicLedgerManager;
 import it.unicam.cs.pa.jbudget105135.interfaces.ILedger;
 import it.unicam.cs.pa.jbudget105135.interfaces.ILedgerManager;
 import it.unicam.cs.pa.jbudget105135.interfaces.IView;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.function.Consumer;
 
-public class AppTest<T extends ILedger> {
+public class App{
 
 
     private final IView IView;
     private final ILedgerManager ledgerManager;
 
-    public AppTest(IView IView, ILedgerManager ledgerManager) {
+    public App(IView IView, ILedgerManager ledgerManager) {
         this.IView = IView;
         this.ledgerManager = ledgerManager;
     }
@@ -31,13 +33,14 @@ public class AppTest<T extends ILedger> {
         IView.close();
     }
 
-    private static AppTest createBasicLedger() {
+    private static App createBasicLedger() {
         HashMap<String, Consumer<? super ILedger>> commands = new HashMap<>();
         ILedger ledger = new Ledger();
         IView IView = new ConsoleIView<>(ledger,commands);
         ILedgerManager ledgerManager = new BasicLedgerManager<>(ledger, commands);
-        return new AppTest(IView, ledgerManager);
+        return new App(IView, ledgerManager);
     }
+
 
 
 }

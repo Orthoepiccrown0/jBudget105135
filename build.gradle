@@ -1,14 +1,23 @@
 plugins {
     id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+}
+
+javafx {
+    version = "14"
+    modules = [ 'javafx.controls', 'javafx.fxml']
 }
 
 group 'it.unicam.cs.pa.jbudget105135'
-version '0.1'
-
+version '0.2'
 repositories {
     mavenCentral()
 }
 
+mainClassName = 'it.unicam.cs.pa.jbudget105135.AppFX'
+
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation 'com.google.code.gson:gson:2.8.6'
 }
