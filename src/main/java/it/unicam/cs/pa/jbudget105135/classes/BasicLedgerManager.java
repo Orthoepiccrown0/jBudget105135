@@ -100,7 +100,7 @@ public class BasicLedgerManager<T extends ILedger> implements ILedgerManager {
             else
                 tags = generateTagsList(new String[]{input});
             System.out.println("Now we need to add al least one movement.");
-            Transaction transaction = new Transaction(new ArrayList<>(), tags, new Date());
+            Transaction transaction = new Transaction(UUID.randomUUID().toString(),new ArrayList<>(), tags, new Date(),"name");
             createMovement(transaction);
             if (transaction.getMovements().size() == 0)
                 System.out.println("No transaction was added");

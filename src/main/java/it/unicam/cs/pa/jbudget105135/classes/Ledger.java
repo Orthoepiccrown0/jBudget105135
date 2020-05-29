@@ -6,6 +6,7 @@ import it.unicam.cs.pa.jbudget105135.interfaces.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class Ledger implements ILedger {
 
@@ -25,13 +26,7 @@ public class Ledger implements ILedger {
      * @param tags
      * @param ID
      */
-    public Ledger(List<IAccount> accounts, List<ITransaction> transactions, List<IScheduledTransaction> scheduledTransactions, List<ITag> tags, String ID) {
-        this.accounts = accounts;
-        this.transactions = transactions;
-        this.scheduledTransactions = scheduledTransactions;
-        this.tags = tags;
-        this.ID = ID;
-    }
+
 
     /**
      * create new ledger
@@ -41,6 +36,7 @@ public class Ledger implements ILedger {
         this.transactions = new ArrayList<>();
         this.scheduledTransactions = new ArrayList<>();
         this.tags = new ArrayList<>();
+        this.ID = UUID.randomUUID().toString();
     }
 
     public String getID() {

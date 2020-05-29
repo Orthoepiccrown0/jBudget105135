@@ -10,10 +10,10 @@ public class AppFX extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("jBudget");
         primaryStage.setScene(new Scene(root, 1000, 600));
-        primaryStage.setMinWidth(750);
-        primaryStage.setMinHeight(450);
+        primaryStage.setMinWidth(1000);
+        primaryStage.setMinHeight(600);
         primaryStage.show();
     }
 

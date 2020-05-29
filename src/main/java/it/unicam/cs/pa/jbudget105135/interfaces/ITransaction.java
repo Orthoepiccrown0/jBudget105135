@@ -6,6 +6,8 @@ import java.util.List;
 public interface ITransaction {
     String getID();
 
+    String getName();
+
     List<IMovement> getMovements();
 
     void addMovement(IMovement movement);

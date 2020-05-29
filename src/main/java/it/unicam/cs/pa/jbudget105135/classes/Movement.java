@@ -18,7 +18,8 @@ public class Movement implements IMovement {
     private final double amount;
     private final MovementType type;
     private final List<ITag> tags;
-    private final ITransaction transaction;
+    //TODO: i need to fix that shit asap beyatch
+    private transient final ITransaction transaction;
     private final IAccount account;
     private final Date date;
 

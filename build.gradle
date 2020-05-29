@@ -20,4 +20,5 @@ mainClassName = 'it.unicam.cs.pa.jbudget105135.AppFX'
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     implementation 'com.google.code.gson:gson:2.8.6'
+    compile group: 'de.jensd', name: 'fontawesomefx', version: '8.9'
 }

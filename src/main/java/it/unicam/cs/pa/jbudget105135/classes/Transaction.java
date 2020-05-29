@@ -7,7 +7,6 @@ import it.unicam.cs.pa.jbudget105135.interfaces.ITransaction;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 public class Transaction implements ITransaction {
 
@@ -16,6 +15,7 @@ public class Transaction implements ITransaction {
     private final List<ITag> tags;
     private final Date date;
     private double totalAmount = 0;
+    private final String name;
 
     /**
      * restore transaction
@@ -25,30 +25,23 @@ public class Transaction implements ITransaction {
      * @param tags
      * @param date
      */
-    public Transaction(String ID, List<IMovement> movements, List<ITag> tags, Date date) {
+    public Transaction(String ID, List<IMovement> movements, List<ITag> tags, Date date, String name) {
         this.ID = ID;
         this.movements = movements;
         this.tags = tags;
         this.date = date;
+        this.name = name;
     }
 
-    /**
-     * create a new one
-     *
-     * @param movements
-     * @param tags
-     * @param date
-     */
-    public Transaction(List<IMovement> movements, List<ITag> tags, Date date) {
-        this.ID = UUID.randomUUID().toString();
-        this.movements = movements;
-        this.tags = tags;
-        this.date = date;
-    }
 
     @Override
     public String getID() {
         return ID;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override

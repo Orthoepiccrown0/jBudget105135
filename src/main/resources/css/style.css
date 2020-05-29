@@ -1,0 +1,15 @@
+.sidebar{
+    -fx-background-color: #e3e3e3;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0.0, 0.0);
+}
+
+.centralpane{
+    -fx-border-radius: 16 16 0 0;
+    -fx-background-radius: 16 16 0 0;
+    -fx-background-color: #e3e3e3;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0.0, 0.0);
+}
+
+.sidebar .custombutton:hover{
+    -fx-background-color: #9c9c9c;
+}
