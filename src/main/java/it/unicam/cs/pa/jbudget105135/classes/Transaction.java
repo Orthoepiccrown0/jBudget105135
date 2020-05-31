@@ -16,6 +16,7 @@ public class Transaction implements ITransaction {
     private final Date date;
     private double totalAmount = 0;
     private final String name;
+    private int numberOfMovements = 0;
 
     /**
      * restore transaction
@@ -52,6 +53,11 @@ public class Transaction implements ITransaction {
     @Override
     public void addMovement(IMovement movement) {
         movements.add(movement);
+        numberOfMovements++;
+    }
+
+    public int getNumberOfMovements() {
+        return numberOfMovements;
     }
 
     @Override

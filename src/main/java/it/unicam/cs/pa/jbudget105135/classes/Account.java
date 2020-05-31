@@ -116,13 +116,6 @@ public class Account implements IAccount {
 
     @Override
     public String toString() {
-        return "Account{" +
-                "ID='" + ID + '\'' +
-                ", type=" + type +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", openingBalance=" + openingBalance +
-                ", balance=" + balance +
-                '}';
+        return name + ", " + type + ", balance:" + balance;
     }
 }

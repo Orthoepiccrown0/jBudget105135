@@ -1,5 +1,7 @@
 package it.unicam.cs.pa.jbudget105135.utils;
 
+import com.google.gson.Gson;
+import it.unicam.cs.pa.jbudget105135.classes.Ledger;
 import it.unicam.cs.pa.jbudget105135.fxcontrollers.Main;
 import javafx.concurrent.Task;
 
@@ -32,6 +34,9 @@ public class FileManager {
             protected void succeeded() {
                 super.succeeded();
                 main.progressBar.setVisible(false);
+                Gson gson = new Gson();
+                Ledger ledger = gson.fromJson(getValue(), Ledger.class);
+                main.setLedger(ledger);
             }
 
 
@@ -41,7 +46,7 @@ public class FileManager {
 
     }
 
-    public static void saveToFile(String path, Main main, String data){
+    public static void saveToFile(String path, Main main, String data) {
         Task task = new Task<Path>() {
             @Override
             public Path call() throws InterruptedException, IOException {

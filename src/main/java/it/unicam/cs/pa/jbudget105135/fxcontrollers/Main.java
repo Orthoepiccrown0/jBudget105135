@@ -1,24 +1,37 @@
 package it.unicam.cs.pa.jbudget105135.fxcontrollers;
 
 import com.google.gson.Gson;
+import it.unicam.cs.pa.jbudget105135.AccountType;
 import it.unicam.cs.pa.jbudget105135.classes.Ledger;
+import it.unicam.cs.pa.jbudget105135.classes.Transaction;
+import it.unicam.cs.pa.jbudget105135.interfaces.IAccount;
 import it.unicam.cs.pa.jbudget105135.interfaces.ILedger;
+import it.unicam.cs.pa.jbudget105135.interfaces.ITransaction;
 import it.unicam.cs.pa.jbudget105135.utils.FileManager;
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TableView;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class Main implements Initializable {
     public Pane controlsPane;
@@ -33,7 +46,7 @@ public class Main implements Initializable {
     public Button thirdActionButton;
 
     public Label page;
-    public TableView table;
+    public TableView<Transaction> table;
 
     public AnchorPane transactionPane;
     public AnchorPane movementPane;
@@ -43,6 +56,10 @@ public class Main implements Initializable {
 
     private Gson GLedger;
     private ILedger ledger;
+    private File saveFile;
+
+    ObservableList<ITransaction> transactions;
+    ObservableList<IAccount> accounts;
 
     private enum PageType {
         TRANSACTIONS,
@@ -61,14 +78,30 @@ public class Main implements Initializable {
 
     public void switchToTransactions(ContextMenuEvent contextMenuEvent) {
         currentPage = PageType.TRANSACTIONS;
-
+        page.setText("Transactions");
+        table.setVisible(true);
+        setupActionButtonsForTransactions();
+        setupTableForTransactions();
     }
+
 
     public void switchToAccounts(ContextMenuEvent contextMenuEvent) {
         currentPage = PageType.ACCOUNTS;
     }
 
     public void createNewFile(MouseEvent mouseEvent) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save jBudget file");
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("JSON files", "*.json");
+        fileChooser.getExtensionFilters().add(filter);
+
+        saveFile = fileChooser.showSaveDialog(backButton.getScene().getWindow());
+        if (saveFile != null) {
+            FileManager.saveToFile(saveFile.getPath(), this, "");
+        }
+        ledger = new Ledger();
+        ledger.addAccount(AccountType.ASSETS, "name", "desc", 1500);
+        switchToTransactions(null);
     }
 
     public void loadFromFile(MouseEvent mouseEvent) {
@@ -82,17 +115,96 @@ public class Main implements Initializable {
             FileManager.loadDataFromFile(file.getPath(), this);
         }
 
+        switchToTransactions(null);
     }
 
     public void back(ActionEvent actionEvent) {
     }
 
     public void firstAction(ActionEvent actionEvent) {
+        if(currentPage == PageType.TRANSACTIONS){
+            addNewTransaction();
+        }
     }
+
+
 
     public void secondAction(ActionEvent actionEvent) {
     }
 
     public void thirdAction(ActionEvent actionEvent) {
+    }
+
+    private void setupActionButtonsForTransactions() {
+        controlsPane.setVisible(true);
+        thirdActionButton.setVisible(false);
+        secondActionButton.setDisable(true);
+        secondActionButton.setText("Delete");
+        secondActionButton.getStyleClass().removeAll();
+        secondActionButton.getStyleClass().add("redButton");
+        firstActionButton.setText("Add");
+        firstActionButton.getStyleClass().removeAll();
+        firstActionButton.getStyleClass().add("greenButton");
+    }
+
+    private void setupActionButtonsForMovements() {
+    }
+
+    private void setupActionButtonsForAccounts() {
+    }
+
+    private void setupTableForTransactions() {
+        TableColumn<Transaction, String> column1 = new TableColumn<>("Name");
+        column1.setCellValueFactory(new PropertyValueFactory<>("name"));
+        TableColumn<Transaction, Integer> column2 = new TableColumn<>("N. of movements");
+        column2.setCellValueFactory(new PropertyValueFactory<>("numberOfMovements"));
+        TableColumn<Transaction, Double> column3 = new TableColumn<>("Total");
+        column3.setCellValueFactory(new PropertyValueFactory<>("totalAmount"));
+        TableColumn<Transaction, Date> column4 = new TableColumn<>("Date");
+        column4.setCellValueFactory(new PropertyValueFactory<>("date"));
+        table.getColumns().addAll(column1, column2, column3, column4);
+        TableView.TableViewSelectionModel<Transaction> selectionModel = table.getSelectionModel();
+        selectionModel.setSelectionMode(SelectionMode.SINGLE);
+    }
+
+    private void setupTableForAccounts() {
+    }
+
+    public void setLedger(ILedger ledger) {
+        this.ledger = ledger;
+        setTableDataForTransactions();
+    }
+
+    private void setTableDataForTransactions() {
+        ObservableList<ITransaction> transactions = FXCollections.observableList(ledger.getTransactions());
+        table.getItems().addAll((Transaction) transactions);
+    }
+
+    private void setTableDataForAccounts() {
+    }
+
+    public void setGLedger(Gson GLedger) {
+        this.GLedger = GLedger;
+    }
+
+    private void addNewTransaction() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../newTransactionDialog.fxml"));
+            Parent root = loader.load();
+            TransactionDialog controller = loader.getController();
+            controller.setLedger(ledger);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Transaction");
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.show();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addNewMovement() {
     }
 }

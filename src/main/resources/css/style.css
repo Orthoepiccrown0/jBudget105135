@@ -1,15 +1,32 @@
-.sidebar{
+.sidebar {
     -fx-background-color: #e3e3e3;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0.0, 0.0);
 }
 
-.centralpane{
+.centralpane {
     -fx-border-radius: 16 16 0 0;
     -fx-background-radius: 16 16 0 0;
     -fx-background-color: #e3e3e3;
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0.0, 0.0);
 }
 
-.sidebar .custombutton:hover{
+.sidebar .custombutton:hover {
     -fx-background-color: #9c9c9c;
+}
+
+.redButton {
+    -fx-background-color: #9e0000;
+    -fx-text-fill: white;
+}
+
+.greenButton {
+    -fx-background-color: #005f00;
+    -fx-text-fill: white;
+}
+
+.roundedPane{
+    -fx-border-radius: 16 16 16 16;
+    -fx-background-radius: 16 16 16 16;
+    -fx-background-color: #e3e3e3;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0.0, 0.0);
 }

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="450.0" prefWidth="503.0" stylesheets="@../../../../../css/style.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unicam.cs.pa.jbudget105135.fxcontrollers.MovementDialog">
+   <children>
+      <AnchorPane layoutX="38.0" layoutY="40.0" prefHeight="336.0" prefWidth="500.0" styleClass="roundedPane" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+         <children>
+            <Label layoutX="214.0" layoutY="14.0" text="Movement">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <TextArea fx:id="description" layoutX="46.0" layoutY="53.0" prefHeight="208.0" prefWidth="200.0" promptText="Description" />
+            <TextField fx:id="amount" layoutX="286.0" layoutY="53.0" promptText="Amount" />
+            <ComboBox fx:id="movementType" layoutX="286.0" layoutY="109.0" prefWidth="150.0" />
+            <ComboBox fx:id="account" layoutX="286.0" layoutY="162.0" prefWidth="150.0" />
+            <Label layoutX="286.0" layoutY="92.0" text="Movement type" />
+            <Label layoutX="286.0" layoutY="145.0" text="Account" />
+            <TextArea fx:id="tags" layoutX="286.0" layoutY="199.0" prefHeight="98.0" prefWidth="150.0" promptText="Tags, use comma to separate" />
+            <Label fx:id="errorMessage" layoutX="46.0" layoutY="305.0" text="Error" textFill="RED" visible="false">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <DatePicker fx:id="datePicker" layoutX="46.0" layoutY="272.0" prefHeight="25.0" prefWidth="200.0" promptText="Date" />
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="233.0" layoutY="387.0" prefHeight="60.0" prefWidth="200.0" styleClass="centralpane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
+         <children>
+            <Button fx:id="okButton" layoutX="426.0" layoutY="18.0" mnemonicParsing="false" onAction="#submitAction" text="OK" />
+            <Button fx:id="cancelButton" layoutX="364.0" layoutY="18.0" mnemonicParsing="false" onAction="#cancelAction" text="Cancel" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
