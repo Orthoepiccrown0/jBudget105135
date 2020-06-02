@@ -13,7 +13,7 @@
    <children>
       <AnchorPane layoutX="200.0" layoutY="51.0" prefHeight="280.0" prefWidth="670.0" styleClass="roundedPane" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="30.0">
          <children>
-            <Label layoutX="278.0" layoutY="14.0" text="New transaction">
+            <Label layoutX="294.0" layoutY="14.0" text="Transaction">
                <font>
                   <Font size="16.0" />
                </font>

@@ -20,21 +20,22 @@ public class Account implements IAccount {
 
     /**
      * restore account
-     *
      * @param ID
      * @param type
      * @param name
      * @param description
      * @param openingBalance
      * @param movements
+     * @param balance
      */
-    public Account(String ID, AccountType type, String name, String description, double openingBalance, List<IMovement> movements) {
+    public Account(String ID, AccountType type, String name, String description, double openingBalance, List<IMovement> movements, double balance) {
         this.ID = ID;
         this.type = type;
         this.name = name;
         this.description = description;
         this.openingBalance = openingBalance;
         this.movements = movements;
+        this.balance = balance;
     }
 
     /**

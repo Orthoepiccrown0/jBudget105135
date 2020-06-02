@@ -5,6 +5,7 @@ import it.unicam.cs.pa.jbudget105135.MovementType;
 import it.unicam.cs.pa.jbudget105135.classes.Movement;
 import it.unicam.cs.pa.jbudget105135.classes.Tag;
 import it.unicam.cs.pa.jbudget105135.interfaces.IAccount;
+import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITag;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -16,10 +17,7 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class MovementDialog implements Initializable {
     public TextArea description;
@@ -36,8 +34,8 @@ public class MovementDialog implements Initializable {
     public Button cancelButton;
     public DatePicker datePicker;
 
-    private ArrayList<Movement> movements;
-    private ArrayList<IAccount> accounts;
+    private List<Movement> movements;
+    private List<IAccount> accounts;
     private Date date;
     private TableView<Movement> movementTableView;
 
@@ -76,7 +74,7 @@ public class MovementDialog implements Initializable {
         });
     }
 
-    public void referMovements(ArrayList<Movement> movements) {
+    public void setMovements(List<Movement> movements) {
         this.movements = movements;
     }
 
@@ -101,6 +99,7 @@ public class MovementDialog implements Initializable {
     }
 
     private void refreshTable() {
+        movementTableView.getItems().clear();
         movementTableView.getItems().addAll(movements);
     }
 
@@ -169,7 +168,7 @@ public class MovementDialog implements Initializable {
         if (type == MovementType.DEBIT) {
             if (account.getType() == AccountType.ASSETS) {
                 if (account.getBalance() < amount) {
-                    System.out.println("You cant afford this movement");
+//                    System.out.println("You cant afford this movement");
                     return false;
                 } else {
                     account.decreaseBy(amount);
@@ -182,7 +181,7 @@ public class MovementDialog implements Initializable {
                 account.increaseBy(amount);
             } else if (account.getType() == AccountType.LIABILITIES) {
                 if (account.getBalance() < amount) {
-                    System.out.println("You cant afford this movement");
+//                    System.out.println("You cant afford this movement");
                     return false;
                 } else {
                     account.decreaseBy(amount);

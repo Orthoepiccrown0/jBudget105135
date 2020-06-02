@@ -4,9 +4,7 @@ import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITag;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITransaction;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class Transaction implements ITransaction {
 
@@ -16,12 +14,10 @@ public class Transaction implements ITransaction {
     private final Date date;
     private double totalAmount = 0;
     private final String name;
-    private int numberOfMovements = 0;
 
     /**
      * restore transaction
-     *
-     * @param ID
+     *  @param ID
      * @param movements
      * @param tags
      * @param date
@@ -53,18 +49,16 @@ public class Transaction implements ITransaction {
     @Override
     public void addMovement(IMovement movement) {
         movements.add(movement);
-        numberOfMovements++;
     }
 
     public int getNumberOfMovements() {
-        return numberOfMovements;
+        return movements.size();
     }
 
     @Override
     public boolean removeMovement(IMovement movement) {
         return movements.remove(movement);
     }
-
 
     @Override
     public List<ITag> getTags() {

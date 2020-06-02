@@ -61,7 +61,9 @@
          </children></Pane>
       <AnchorPane layoutX="261.0" layoutY="44.0" prefHeight="567.0" prefWidth="755.0" styleClass="centralpane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
          <children>
-            <TableView fx:id="table" focusTraversable="false" layoutX="-2.0" layoutY="123.0" prefHeight="456.0" prefWidth="755.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />
+            <TableView fx:id="transactionsTable" visible="false" focusTraversable="false" layoutX="-2.0" layoutY="123.0" prefHeight="456.0" prefWidth="755.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />
+            <TableView fx:id="accountsTable"  visible="false" focusTraversable="false" layoutX="-2.0" layoutY="123.0" prefHeight="456.0" prefWidth="755.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />
+            <TableView fx:id="scheduledTable" visible="false" focusTraversable="false" layoutX="-2.0" layoutY="123.0" prefHeight="456.0" prefWidth="755.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />
             <AnchorPane fx:id="transactionPane" layoutY="371.0" prefHeight="200.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />
             <AnchorPane fx:id="movementPane" layoutY="371.0" prefHeight="200.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />
             <AnchorPane fx:id="accountPane" layoutY="371.0" prefHeight="200.0" prefWidth="200.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0" />

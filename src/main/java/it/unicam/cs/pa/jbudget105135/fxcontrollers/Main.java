@@ -2,19 +2,20 @@ package it.unicam.cs.pa.jbudget105135.fxcontrollers;
 
 import com.google.gson.Gson;
 import it.unicam.cs.pa.jbudget105135.AccountType;
+import it.unicam.cs.pa.jbudget105135.classes.Account;
 import it.unicam.cs.pa.jbudget105135.classes.Ledger;
+import it.unicam.cs.pa.jbudget105135.classes.ScheduledTransaction;
 import it.unicam.cs.pa.jbudget105135.classes.Transaction;
 import it.unicam.cs.pa.jbudget105135.interfaces.IAccount;
 import it.unicam.cs.pa.jbudget105135.interfaces.ILedger;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITransaction;
 import it.unicam.cs.pa.jbudget105135.utils.FileManager;
-import javafx.beans.Observable;
+import it.unicam.cs.pa.jbudget105135.utils.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -26,7 +27,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,11 +46,15 @@ public class Main implements Initializable {
     public Button thirdActionButton;
 
     public Label page;
-    public TableView<Transaction> table;
+//    public TableView<Transaction> table;
 
     public AnchorPane transactionPane;
     public AnchorPane movementPane;
     public AnchorPane accountPane;
+
+    public TableView<Transaction> transactionsTable;
+    public TableView<Account> accountsTable;
+    public TableView<ScheduledTransaction> scheduledTable;
 
     public ProgressBar progressBar;
 
@@ -58,8 +62,8 @@ public class Main implements Initializable {
     private ILedger ledger;
     private File saveFile;
 
-    ObservableList<ITransaction> transactions;
-    ObservableList<IAccount> accounts;
+    ArrayList<Transaction> transactions;
+    ArrayList<Account> accounts;
 
     private enum PageType {
         TRANSACTIONS,
@@ -79,7 +83,7 @@ public class Main implements Initializable {
     public void switchToTransactions(ContextMenuEvent contextMenuEvent) {
         currentPage = PageType.TRANSACTIONS;
         page.setText("Transactions");
-        table.setVisible(true);
+        transactionsTable.setVisible(true);
         setupActionButtonsForTransactions();
         setupTableForTransactions();
     }
@@ -162,8 +166,8 @@ public class Main implements Initializable {
         column3.setCellValueFactory(new PropertyValueFactory<>("totalAmount"));
         TableColumn<Transaction, Date> column4 = new TableColumn<>("Date");
         column4.setCellValueFactory(new PropertyValueFactory<>("date"));
-        table.getColumns().addAll(column1, column2, column3, column4);
-        TableView.TableViewSelectionModel<Transaction> selectionModel = table.getSelectionModel();
+        transactionsTable.getColumns().addAll(column1, column2, column3, column4);
+        TableView.TableViewSelectionModel<Transaction> selectionModel = transactionsTable.getSelectionModel();
         selectionModel.setSelectionMode(SelectionMode.SINGLE);
     }
 
@@ -176,8 +180,8 @@ public class Main implements Initializable {
     }
 
     private void setTableDataForTransactions() {
-        ObservableList<ITransaction> transactions = FXCollections.observableList(ledger.getTransactions());
-        table.getItems().addAll((Transaction) transactions);
+        transactionsTable.getItems().clear();
+        transactionsTable.getItems().addAll(transactions);
     }
 
     private void setTableDataForAccounts() {
@@ -198,11 +202,17 @@ public class Main implements Initializable {
             stage.setTitle("Transaction");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
-            stage.show();
+            stage.showAndWait();
+            refreshTransactionsTable();
         }
         catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void refreshTransactionsTable() {
+        transactions = (ArrayList<Transaction>) Utils.transformITransactions(ledger.getTransactions());
+        setTableDataForTransactions();
     }
 
     private void addNewMovement() {

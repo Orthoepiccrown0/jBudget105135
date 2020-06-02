@@ -30,7 +30,7 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <DatePicker fx:id="datePicker" layoutX="46.0" layoutY="272.0" prefHeight="25.0" prefWidth="200.0" promptText="Date" />
+            <DatePicker fx:id="datePicker" editable="false" layoutX="46.0" layoutY="272.0" prefHeight="25.0" prefWidth="200.0" promptText="Date" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="233.0" layoutY="387.0" prefHeight="60.0" prefWidth="200.0" styleClass="centralpane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">
