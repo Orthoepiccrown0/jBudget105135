@@ -152,7 +152,7 @@ public class BasicLedgerManager<T extends ILedger> implements ILedgerManager {
                 tags = generateTagsList(new String[]{input});
 
             IAccount account = chooseAccountAndCheckAffordable(selectedType, amount);
-            Movement movement = new Movement(description, amount, selectedType, tags, transaction, account, transaction.getDate());
+            Movement movement = new Movement(description, amount, selectedType, tags,  transaction.getDate());
             if (account != null) {
                 account.addMovement(movement);
             }

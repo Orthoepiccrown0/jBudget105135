@@ -1,16 +1,18 @@
 package it.unicam.cs.pa.jbudget105135.utils;
 
 import it.unicam.cs.pa.jbudget105135.classes.Account;
+import it.unicam.cs.pa.jbudget105135.classes.Ledger;
 import it.unicam.cs.pa.jbudget105135.classes.Movement;
 import it.unicam.cs.pa.jbudget105135.classes.Transaction;
 import it.unicam.cs.pa.jbudget105135.interfaces.IAccount;
+import it.unicam.cs.pa.jbudget105135.interfaces.ILedger;
 import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITransaction;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Utils {
+public class ListsUtils {
     public static List<Movement> transformIMovements(List<IMovement> iMovements) {
         List<Movement> movements = new ArrayList<>();
         for (IMovement m : iMovements) {
@@ -19,8 +21,6 @@ public class Utils {
                     m.getAmount(),
                     m.getType(),
                     m.tags(),
-                    null,
-                    m.getAccount(),
                     m.getDate()));
         }
         return movements;
@@ -50,6 +50,14 @@ public class Utils {
                     m.getBalance()));
         }
         return acc;
+    }
+
+    public static void searchTransactionAndReplaceIt(Transaction transaction, ILedger ledger){
+        for (int i = 0; i < ledger.getTransactions().size(); i++) {
+            Transaction t = (Transaction) ledger.getTransactions().get(i);
+            if(transaction.getID().equals(t.getID()))
+                ledger.getTransactions().set(i,transaction);
+        }
     }
 
 }

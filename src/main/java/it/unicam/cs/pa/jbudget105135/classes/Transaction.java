@@ -9,12 +9,12 @@ import java.util.*;
 public class Transaction implements ITransaction {
 
     private final String ID;
-    private final List<IMovement> movements;
-    private final List<ITag> tags;
-    private final Date date;
+    private List<IMovement> movements;
+    private List<ITag> tags;
+    private Date date;
     private double totalAmount = 0;
-    private final String name;
-
+    private String name;
+    private int numberOfMovements = 0;
     /**
      * restore transaction
      *  @param ID
@@ -30,6 +30,17 @@ public class Transaction implements ITransaction {
         this.name = name;
     }
 
+    public void setTags(List<ITag> tags) {
+        this.tags = tags;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     @Override
     public String getID() {
@@ -49,10 +60,6 @@ public class Transaction implements ITransaction {
     @Override
     public void addMovement(IMovement movement) {
         movements.add(movement);
-    }
-
-    public int getNumberOfMovements() {
-        return movements.size();
     }
 
     @Override
@@ -83,9 +90,18 @@ public class Transaction implements ITransaction {
 
 
     private void calculateTotalAmount() {
+        totalAmount = 0;
         for (IMovement move : movements) {
             totalAmount += move.getAmount();
         }
+    }
+
+    public int getNumberOfMovements() {
+        return movements.size();
+    }
+
+    public void setMovements(List<IMovement> movements) {
+        this.movements = movements;
     }
 
     @Override

@@ -27,6 +27,6 @@ public class Tag implements ITag {
 
     @Override
     public String toString() {
-        return name;
+        return name.trim();
     }
 }

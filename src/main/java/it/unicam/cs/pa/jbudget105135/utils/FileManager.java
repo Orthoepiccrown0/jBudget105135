@@ -1,8 +1,10 @@
 package it.unicam.cs.pa.jbudget105135.utils;
 
 import com.google.gson.Gson;
-import it.unicam.cs.pa.jbudget105135.classes.Ledger;
+import com.google.gson.GsonBuilder;
+import it.unicam.cs.pa.jbudget105135.classes.*;
 import it.unicam.cs.pa.jbudget105135.fxcontrollers.Main;
+import it.unicam.cs.pa.jbudget105135.interfaces.*;
 import javafx.concurrent.Task;
 
 import java.io.IOException;
@@ -13,15 +15,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class FileManager {
-    private String path;
-
-    public FileManager(String path) {
-        this.path = path;
-    }
-
-    public String getPath() {
-        return path;
-    }
 
     public static void loadDataFromFile(String path, Main main) {
         Task task = new Task<String>() {
@@ -34,7 +27,13 @@ public class FileManager {
             protected void succeeded() {
                 super.succeeded();
                 main.progressBar.setVisible(false);
-                Gson gson = new Gson();
+                Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(IMovement.class, InterfaceSerializer.interfaceSerializer(Movement.class))
+                        .registerTypeAdapter(ITransaction.class, InterfaceSerializer.interfaceSerializer(Transaction.class))
+                        .registerTypeAdapter(IAccount.class, InterfaceSerializer.interfaceSerializer(Account.class))
+                        .registerTypeAdapter(ITag.class, InterfaceSerializer.interfaceSerializer(Tag.class))
+                        .registerTypeAdapter(IScheduledTransaction.class, InterfaceSerializer.interfaceSerializer(ScheduledTransaction.class))
+                        .create();
                 Ledger ledger = gson.fromJson(getValue(), Ledger.class);
                 main.setLedger(ledger);
             }

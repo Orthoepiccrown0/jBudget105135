@@ -21,7 +21,7 @@
             <TextArea fx:id="description" layoutX="46.0" layoutY="53.0" prefHeight="208.0" prefWidth="200.0" promptText="Description" />
             <TextField fx:id="amount" layoutX="286.0" layoutY="53.0" promptText="Amount" />
             <ComboBox fx:id="movementType" layoutX="286.0" layoutY="109.0" prefWidth="150.0" />
-            <ComboBox fx:id="account" layoutX="286.0" layoutY="162.0" prefWidth="150.0" />
+            <ComboBox fx:id="accountBox" layoutX="286.0" layoutY="162.0" prefWidth="150.0" />
             <Label layoutX="286.0" layoutY="92.0" text="Movement type" />
             <Label layoutX="286.0" layoutY="145.0" text="Account" />
             <TextArea fx:id="tags" layoutX="286.0" layoutY="199.0" prefHeight="98.0" prefWidth="150.0" promptText="Tags, use comma to separate" />

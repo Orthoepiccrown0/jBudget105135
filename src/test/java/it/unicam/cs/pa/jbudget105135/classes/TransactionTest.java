@@ -22,7 +22,7 @@ public class TransactionTest extends TestCase {
         transactionTags.add(new Tag("ttag2"));
         transactionTags.add(new Tag("ttag2"));
         ITransaction transaction = new Transaction(UUID.randomUUID().toString(),new ArrayList<>(), transactionTags, new Date(),"name");
-        IMovement movement = new Movement("description", 1000, MovementType.CREDIT, movementTags, transaction, null, transaction.getDate());
+        IMovement movement = new Movement("description", 1000, MovementType.CREDIT, movementTags, transaction.getDate());
         transaction.addMovement(movement);
         assertEquals(movement.getID(), transaction.getMovements().get(0).getID());
     }
@@ -36,7 +36,7 @@ public class TransactionTest extends TestCase {
         transactionTags.add(new Tag("ttag2"));
         transactionTags.add(new Tag("ttag2"));
         ITransaction transaction = new Transaction(UUID.randomUUID().toString(),new ArrayList<>(), transactionTags, new Date(),"name");
-        IMovement movement = new Movement("description", 1000, MovementType.CREDIT, movementTags, transaction, null, transaction.getDate());
+        IMovement movement = new Movement("description", 1000, MovementType.CREDIT, movementTags,   transaction.getDate());
         transaction.addMovement(movement);
         transaction.removeMovement(movement);
         assertEquals(0, transaction.getMovements().size());
@@ -50,7 +50,7 @@ public class TransactionTest extends TestCase {
         transactionTags.add(new Tag("ttag1"));
         transactionTags.add(new Tag("ttag2"));
         ITransaction transaction = new Transaction(UUID.randomUUID().toString(),new ArrayList<>(), transactionTags, new Date(),"name");
-        IMovement movement = new Movement("description", 1000, MovementType.CREDIT, movementTags, transaction, null, transaction.getDate());
+        IMovement movement = new Movement("description", 1000, MovementType.CREDIT, movementTags,   transaction.getDate());
         transaction.addMovement(movement);
         assertEquals("ttag1", transaction.getTags().get(0).toString());
         assertEquals("ttag2", transaction.getTags().get(1).toString());
@@ -64,7 +64,7 @@ public class TransactionTest extends TestCase {
         transactionTags.add(new Tag("ttag1"));
         transactionTags.add(new Tag("ttag2"));
         ITransaction transaction = new Transaction(UUID.randomUUID().toString(),new ArrayList<>(), transactionTags, new Date(),"name");
-        IMovement movement = new Movement("description", 1000, MovementType.CREDIT, movementTags, transaction, null, transaction.getDate());
+        IMovement movement = new Movement("description", 1000, MovementType.CREDIT, movementTags,   transaction.getDate());
         transaction.addMovement(movement);
         transaction.addTag(new Tag("ttag3"));
         assertEquals("ttag1", transaction.getTags().get(0).toString());
@@ -80,7 +80,7 @@ public class TransactionTest extends TestCase {
         transactionTags.add(new Tag("ttag1"));
         transactionTags.add(new Tag("ttag2"));
         ITransaction transaction = new Transaction(UUID.randomUUID().toString(),new ArrayList<>(), transactionTags, new Date(),"name");
-        IMovement movement = new Movement("description", 1000, MovementType.CREDIT, movementTags, transaction, null, transaction.getDate());
+        IMovement movement = new Movement("description", 1000, MovementType.CREDIT, movementTags,   transaction.getDate());
         transaction.addMovement(movement);
         transaction.removeTag(transaction.getTags().get(0));
         assertEquals(1, transaction.getTags().size());
@@ -94,8 +94,8 @@ public class TransactionTest extends TestCase {
         transactionTags.add(new Tag("ttag1"));
         transactionTags.add(new Tag("ttag2"));
         ITransaction transaction = new Transaction(UUID.randomUUID().toString(),new ArrayList<>(), transactionTags, new Date(),"name");
-        IMovement movement = new Movement("description", 1000, MovementType.CREDIT, movementTags, transaction, null, transaction.getDate());
-        IMovement movement1 = new Movement("description", 500, MovementType.DEBIT, movementTags, transaction, null, transaction.getDate());
+        IMovement movement = new Movement("description", 1000, MovementType.CREDIT, movementTags,   transaction.getDate());
+        IMovement movement1 = new Movement("description", 500, MovementType.DEBIT, movementTags,   transaction.getDate());
         transaction.addMovement(movement);
         transaction.addMovement(movement1);
         assertEquals(1500.0,transaction.getTotalAmount());

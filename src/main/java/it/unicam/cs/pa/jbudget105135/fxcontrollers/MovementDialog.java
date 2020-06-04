@@ -5,7 +5,6 @@ import it.unicam.cs.pa.jbudget105135.MovementType;
 import it.unicam.cs.pa.jbudget105135.classes.Movement;
 import it.unicam.cs.pa.jbudget105135.classes.Tag;
 import it.unicam.cs.pa.jbudget105135.interfaces.IAccount;
-import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITag;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -15,7 +14,6 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.net.URL;
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
 
@@ -24,7 +22,7 @@ public class MovementDialog implements Initializable {
     public TextField amount;
 
     public ComboBox<MovementType> movementType;
-    public ComboBox<IAccount> account;
+    public ComboBox<IAccount> accountBox;
 
     public TextArea tags;
 
@@ -58,7 +56,7 @@ public class MovementDialog implements Initializable {
     }
 
     private void fillAccountsBox() {
-        account.getItems().addAll(accounts);
+        accountBox.getItems().addAll(accounts);
     }
 
     //force amount input to numbers-only
@@ -88,20 +86,18 @@ public class MovementDialog implements Initializable {
 
     public void submitAction(ActionEvent actionEvent) {
         if (isValidMovement()) {
+            IAccount account = accountBox.getSelectionModel().getSelectedItem();
             Movement movement = new Movement(description.getText(), Double.parseDouble(amount.getText()),
                     movementType.getSelectionModel().getSelectedItem(),
-                    parseTags(), null, account.getSelectionModel().getSelectedItem(), new Date());
+                    parseTags(), new Date());
             movements.add(movement);
-            refreshTable();
+            account.addMovement(movement);
             Stage stage = (Stage) okButton.getScene().getWindow();
             stage.close();
         }
     }
 
-    private void refreshTable() {
-        movementTableView.getItems().clear();
-        movementTableView.getItems().addAll(movements);
-    }
+
 
     private List<ITag> parseTags() {
         List<ITag> tagsList = new ArrayList<>();
@@ -122,7 +118,7 @@ public class MovementDialog implements Initializable {
             return false;
         }
 
-        if (account.getSelectionModel().isEmpty()) {
+        if (accountBox.getSelectionModel().isEmpty()) {
             setErrorMessage("Error: no account selected");
             return false;
         }
@@ -162,7 +158,7 @@ public class MovementDialog implements Initializable {
     }
 
     private boolean canAffordIt() {
-        IAccount account = this.account.getSelectionModel().getSelectedItem();
+        IAccount account = this.accountBox.getSelectionModel().getSelectedItem();
         MovementType type = this.movementType.getSelectionModel().getSelectedItem();
         double amount = Double.parseDouble(this.amount.getText());
         if (type == MovementType.DEBIT) {

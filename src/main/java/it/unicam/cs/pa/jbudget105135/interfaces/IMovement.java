@@ -12,10 +12,6 @@ public interface IMovement {
 
     double getAmount();
 
-    ITransaction getTransaction();
-
-    IAccount getAccount();
-
     String getID();
 
     Date getDate();

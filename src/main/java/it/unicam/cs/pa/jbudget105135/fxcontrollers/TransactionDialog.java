@@ -7,6 +7,7 @@ import it.unicam.cs.pa.jbudget105135.interfaces.IAccount;
 import it.unicam.cs.pa.jbudget105135.interfaces.ILedger;
 import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITag;
+import it.unicam.cs.pa.jbudget105135.utils.ListsUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -62,10 +63,16 @@ public class TransactionDialog implements Initializable {
             stage.setTitle("Movement");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
-            stage.show();
+            stage.showAndWait();
+            refreshTable();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void refreshTable() {
+        movementsTable.getItems().clear();
+        movementsTable.getItems().addAll(movements);
     }
 
     public void deleteMovement(ActionEvent actionEvent) {
@@ -74,13 +81,28 @@ public class TransactionDialog implements Initializable {
 
     public void addTransaction(ActionEvent actionEvent) {
         if (isValidTransaction()) {
-            imovements.addAll(movements);
-            Transaction transaction = new Transaction(UUID.randomUUID().toString(), imovements, generateTags(),
-                    extractDateFromPicker(), nameField.getText());
-            ledger.addTransaction(transaction);
-            Stage stage = (Stage) cancelButton.getScene().getWindow();
-            stage.close();
+            if (transaction == null) {
+                imovements.addAll(movements);
+                Transaction transaction = new Transaction(UUID.randomUUID().toString(), imovements, generateTags(),
+                        extractDateFromPicker(), nameField.getText());
+                ledger.addTransaction(transaction);
+                closeWindow();
+            } else {
+                transaction.setDate(extractDateFromPicker());
+                transaction.setName(nameField.getText());
+                transaction.setTags(generateTags());
+                imovements.clear();
+                imovements.addAll(movements);
+                transaction.setMovements(imovements);
+                ListsUtils.searchTransactionAndReplaceIt(transaction, ledger);
+                closeWindow();
+            }
         }
+    }
+
+    private void closeWindow() {
+        Stage stage = (Stage) cancelButton.getScene().getWindow();
+        stage.close();
     }
 
     private List<ITag> generateTags() {
@@ -120,8 +142,7 @@ public class TransactionDialog implements Initializable {
     }
 
     public void cancel(ActionEvent actionEvent) {
-        Stage stage = (Stage) cancelButton.getScene().getWindow();
-        stage.close();
+        closeWindow();
     }
 
     private void setErrorMessage(String msg) {
@@ -136,6 +157,25 @@ public class TransactionDialog implements Initializable {
     public void setTransaction(Transaction transaction) {
         this.transaction = transaction;
         setActionButtonsForView();
+        unpack();
+    }
+
+    private void unpack() {
+        movements = ListsUtils.transformIMovements(transaction.getMovements());
+        imovements = transaction.getMovements();
+        nameField.setText(transaction.getName());
+        tagsField.setText(generateStringOfTags());
+        datePicker.setValue(transaction.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        movementsTable.getItems().clear();
+        movementsTable.getItems().addAll(movements);
+    }
+
+    private String generateStringOfTags() {
+        ArrayList<String> tags = new ArrayList<>();
+        for (ITag tag:transaction.getTags()) {
+            tags.add(tag.toString());
+        }
+        return String.join(",",  tags);
     }
 
     private void setActionButtonsForView() {
@@ -154,7 +194,6 @@ public class TransactionDialog implements Initializable {
         column2.setCellValueFactory(new PropertyValueFactory<>("amount"));
         TableColumn<Movement, Double> column3 = new TableColumn<>("Type");
         column3.setCellValueFactory(new PropertyValueFactory<>("type"));
-
         movementsTable.getColumns().addAll(column1, column2, column3);
         TableView.TableViewSelectionModel<Movement> selectionModel = movementsTable.getSelectionModel();
         selectionModel.setSelectionMode(SelectionMode.SINGLE);

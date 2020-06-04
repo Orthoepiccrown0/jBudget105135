@@ -18,32 +18,25 @@ public class Movement implements IMovement {
     private final double amount;
     private final MovementType type;
     private final List<ITag> tags;
-    //TODO: i need to fix that shit asap beyatch
-    private transient final ITransaction transaction;
-    private final IAccount account;
     private final Date date;
 
     //restore constructor
-    public Movement(String ID, String description, double amount, MovementType type, List<ITag> tags, ITransaction transaction, IAccount account, Date date) {
+    public Movement(String ID, String description, double amount, MovementType type, List<ITag> tags,   Date date) {
         this.ID = ID;
         this.description = description;
         this.amount = amount;
         this.type = type;
         this.tags = tags;
-        this.transaction = transaction;
-        this.account = account;
         this.date = date;
     }
 
     //new movement
-    public Movement(String description, double amount, MovementType type, List<ITag> tags, ITransaction transaction, IAccount account, Date date) {
+    public Movement(String description, double amount, MovementType type, List<ITag> tags,   Date date) {
         this.ID = UUID.randomUUID().toString();
         this.description = description;
         this.amount = amount;
         this.type = type;
         this.tags = tags;
-        this.transaction = transaction;
-        this.account = account;
         this.date = date;
     }
 
@@ -60,16 +53,6 @@ public class Movement implements IMovement {
     @Override
     public double getAmount() {
         return amount;
-    }
-
-    @Override
-    public ITransaction getTransaction() {
-        return transaction;
-    }
-
-    @Override
-    public IAccount getAccount() {
-        return account;
     }
 
     @Override
@@ -95,7 +78,6 @@ public class Movement implements IMovement {
                 ", amount=" + amount +
                 ", type=" + type +
                 ", tags=" + Arrays.toString(tags.toArray()) +
-                ", account=" + account +
                 ", date=" + date +
                 '}';
     }

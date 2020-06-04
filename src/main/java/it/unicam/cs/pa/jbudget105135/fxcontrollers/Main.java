@@ -6,13 +6,9 @@ import it.unicam.cs.pa.jbudget105135.classes.Account;
 import it.unicam.cs.pa.jbudget105135.classes.Ledger;
 import it.unicam.cs.pa.jbudget105135.classes.ScheduledTransaction;
 import it.unicam.cs.pa.jbudget105135.classes.Transaction;
-import it.unicam.cs.pa.jbudget105135.interfaces.IAccount;
 import it.unicam.cs.pa.jbudget105135.interfaces.ILedger;
-import it.unicam.cs.pa.jbudget105135.interfaces.ITransaction;
 import it.unicam.cs.pa.jbudget105135.utils.FileManager;
-import it.unicam.cs.pa.jbudget105135.utils.Utils;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import it.unicam.cs.pa.jbudget105135.utils.ListsUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -40,7 +36,6 @@ public class Main implements Initializable {
     public Pane loadBPane;
     public Pane newBPane;
 
-    public Button backButton;
     public Button firstActionButton;
     public Button secondActionButton;
     public Button thirdActionButton;
@@ -58,7 +53,7 @@ public class Main implements Initializable {
 
     public ProgressBar progressBar;
 
-    private Gson GLedger;
+    private Gson GLedger = new Gson();
     private ILedger ledger;
     private File saveFile;
 
@@ -77,7 +72,7 @@ public class Main implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         controlsPane.setVisible(false);
-        backButton.setDisable(true);
+
     }
 
     public void switchToTransactions(ContextMenuEvent contextMenuEvent) {
@@ -99,7 +94,7 @@ public class Main implements Initializable {
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("JSON files", "*.json");
         fileChooser.getExtensionFilters().add(filter);
 
-        saveFile = fileChooser.showSaveDialog(backButton.getScene().getWindow());
+        saveFile = fileChooser.showSaveDialog(transactionsBPane.getScene().getWindow());
         if (saveFile != null) {
             FileManager.saveToFile(saveFile.getPath(), this, "");
         }
@@ -114,9 +109,9 @@ public class Main implements Initializable {
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("JSON files", "*.json");
         fileChooser.getExtensionFilters().add(filter);
 
-        File file = fileChooser.showOpenDialog(backButton.getScene().getWindow());
-        if (file != null) {
-            FileManager.loadDataFromFile(file.getPath(), this);
+        saveFile = fileChooser.showOpenDialog(transactionsBPane.getScene().getWindow());
+        if (saveFile != null) {
+            FileManager.loadDataFromFile(saveFile.getPath(), this);
         }
 
         switchToTransactions(null);
@@ -130,8 +125,6 @@ public class Main implements Initializable {
             addNewTransaction();
         }
     }
-
-
 
     public void secondAction(ActionEvent actionEvent) {
     }
@@ -169,26 +162,33 @@ public class Main implements Initializable {
         transactionsTable.getColumns().addAll(column1, column2, column3, column4);
         TableView.TableViewSelectionModel<Transaction> selectionModel = transactionsTable.getSelectionModel();
         selectionModel.setSelectionMode(SelectionMode.SINGLE);
+        setTransactionsClickListener();
     }
 
-    private void setupTableForAccounts() {
+    private void setTransactionsClickListener() {
+        transactionsTable.setRowFactory( tv -> {
+            TableRow<Transaction> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                    Transaction transaction = row.getItem();
+                    displayTransaction(transaction);
+                }
+            });
+            return row ;
+        });
     }
 
-    public void setLedger(ILedger ledger) {
-        this.ledger = ledger;
-        setTableDataForTransactions();
-    }
-
-    private void setTableDataForTransactions() {
-        transactionsTable.getItems().clear();
-        transactionsTable.getItems().addAll(transactions);
-    }
-
-    private void setTableDataForAccounts() {
-    }
-
-    public void setGLedger(Gson GLedger) {
-        this.GLedger = GLedger;
+    private void displayTransaction(Transaction transaction) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../newTransactionDialog.fxml"));
+            Parent root = loader.load();
+            TransactionDialog controller = loader.getController();
+            controller.setLedger(ledger);
+            controller.setTransaction(transaction);
+            displayTransactionStage(root);
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void addNewTransaction() {
@@ -197,21 +197,47 @@ public class Main implements Initializable {
             Parent root = loader.load();
             TransactionDialog controller = loader.getController();
             controller.setLedger(ledger);
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Transaction");
-            stage.setScene(new Scene(root));
-            stage.setResizable(false);
-            stage.showAndWait();
-            refreshTransactionsTable();
-        }
-        catch (IOException e) {
+            displayTransactionStage(root);
+        }catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    private void displayTransactionStage(Parent root) {
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Transaction");
+        stage.setScene(new Scene(root));
+        stage.setResizable(false);
+        stage.showAndWait();
+        refreshTransactionsTable();
+        saveChanges();
+    }
+
+    private void setupTableForAccounts() {
+    }
+
+    public void setLedger(ILedger ledger) {
+        this.ledger = ledger;
+        refreshTransactionsTable();
+    }
+
+    private void setTableDataForTransactions() {
+        transactionsTable.getItems().clear();
+        transactionsTable.getItems().addAll(transactions);
+    }
+
+    private void setTableDataForAccounts() {
+        accountsTable.getItems().clear();
+        accountsTable.getItems().addAll(accounts);
+    }
+
+    private void saveChanges() {
+        FileManager.saveToFile(saveFile.getPath(),this,GLedger.toJson(ledger));
+    }
+
     private void refreshTransactionsTable() {
-        transactions = (ArrayList<Transaction>) Utils.transformITransactions(ledger.getTransactions());
+        transactions = (ArrayList<Transaction>) ListsUtils.transformITransactions(ledger.getTransactions());
         setTableDataForTransactions();
     }
 

@@ -4,6 +4,7 @@ import it.unicam.cs.pa.jbudget105135.AccountType;
 import it.unicam.cs.pa.jbudget105135.interfaces.IAccount;
 import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -52,6 +53,7 @@ public class Account implements IAccount {
         this.description = description;
         this.openingBalance = openingBalance;
         this.balance = openingBalance;
+        this.movements = new ArrayList<>();
         this.ID = UUID.randomUUID().toString();
     }
 
