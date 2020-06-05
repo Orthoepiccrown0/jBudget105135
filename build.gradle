@@ -6,7 +6,7 @@ plugins {
 
 javafx {
     version = "14"
-    modules = [ 'javafx.controls', 'javafx.fxml']
+    modules = ['javafx.controls', 'javafx.fxml']
 }
 
 group 'it.unicam.cs.pa.jbudget105135'
@@ -15,7 +15,9 @@ repositories {
     mavenCentral()
 }
 
-mainClassName = 'it.unicam.cs.pa.jbudget105135.AppFX'
+application {
+    mainClassName = 'it.unicam.cs.pa.jbudget105135.AppFX'
+}
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'

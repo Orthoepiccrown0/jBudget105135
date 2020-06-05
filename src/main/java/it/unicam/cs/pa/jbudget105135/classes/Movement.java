@@ -6,10 +6,7 @@ import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITag;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITransaction;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Movement implements IMovement {
 
@@ -68,6 +65,20 @@ public class Movement implements IMovement {
     @Override
     public List<ITag> tags() {
         return tags;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Movement movement = (Movement) o;
+        return ID.equals(movement.ID) &&
+                description.equals(movement.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(ID, description);
     }
 
     @Override

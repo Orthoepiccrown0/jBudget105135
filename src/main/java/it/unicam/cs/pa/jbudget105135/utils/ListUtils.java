@@ -12,7 +12,7 @@ import it.unicam.cs.pa.jbudget105135.interfaces.ITransaction;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListsUtils {
+public class ListUtils {
     public static List<Movement> transformIMovements(List<IMovement> iMovements) {
         List<Movement> movements = new ArrayList<>();
         for (IMovement m : iMovements) {
@@ -57,6 +57,30 @@ public class ListsUtils {
             Transaction t = (Transaction) ledger.getTransactions().get(i);
             if(transaction.getID().equals(t.getID()))
                 ledger.getTransactions().set(i,transaction);
+        }
+    }
+
+    public static void searchTransactionDeleteIt(Transaction transaction, ILedger ledger){
+        for (int i = 0; i < ledger.getTransactions().size(); i++) {
+            Transaction t = (Transaction) ledger.getTransactions().get(i);
+            if(transaction.getID().equals(t.getID())) {
+                removeMovementsFromAccount(t.getMovements(), ledger);
+                ledger.getTransactions().remove(t);
+            }
+        }
+    }
+
+    private static void removeMovementsFromAccount(List<IMovement> movements, ILedger ledger) {
+        for (IAccount acc:ledger.getAccounts()) {
+            acc.getMovements().removeAll(movements);
+        }
+    }
+
+    public static void searchAccountAndReplaceIt(Account account, ILedger ledger){
+        for (int i = 0; i < ledger.getTransactions().size(); i++) {
+            Account t = (Account) ledger.getAccounts().get(i);
+            if(account.getID().equals(t.getID()))
+                ledger.getAccounts().set(i,account);
         }
     }
 

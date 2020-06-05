@@ -17,4 +17,5 @@ public interface IMovement {
     Date getDate();
 
     List<ITag> tags();
+
 }

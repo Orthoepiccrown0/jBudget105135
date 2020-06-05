@@ -10,12 +10,12 @@ import java.io.InputStreamReader;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class BasicLedgerManager<T extends ILedger> implements ILedgerManager {
+public class BasicController<T extends ILedger> implements IController {
     private final HashMap<String, Consumer<? super ILedger>> commands;
     private final T ledger;
     private final BufferedReader reader;
 
-    public BasicLedgerManager(T ledger, HashMap<String, Consumer<? super ILedger>> commands) {
+    public BasicController(T ledger, HashMap<String, Consumer<? super ILedger>> commands) {
         this.commands = commands;
         this.ledger = ledger;
         this.reader = new BufferedReader(new InputStreamReader(System.in));

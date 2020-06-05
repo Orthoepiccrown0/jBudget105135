@@ -41,7 +41,7 @@ public class ConsoleIView<T extends ILedger> implements IView {
     }
 
     @Override
-    public void open(ILedgerManager ledgerManager) throws IOException {
+    public void open(IController ledgerManager) throws IOException {
         welcome();
         printCommands();
         while (isOn) {

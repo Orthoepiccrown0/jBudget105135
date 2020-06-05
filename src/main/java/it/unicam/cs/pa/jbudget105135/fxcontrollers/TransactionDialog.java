@@ -7,7 +7,7 @@ import it.unicam.cs.pa.jbudget105135.interfaces.IAccount;
 import it.unicam.cs.pa.jbudget105135.interfaces.ILedger;
 import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITag;
-import it.unicam.cs.pa.jbudget105135.utils.ListsUtils;
+import it.unicam.cs.pa.jbudget105135.utils.ListUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -37,7 +37,6 @@ public class TransactionDialog implements Initializable {
     public DatePicker datePicker;
     private ILedger ledger;
 
-    //    public List<Movement> movements = new ArrayList<>();
     public List<Movement> movements = new ArrayList<>();
     private List<IMovement> imovements = new ArrayList<>();
 
@@ -57,7 +56,6 @@ public class TransactionDialog implements Initializable {
             controller.setMovements(movements);
             controller.setAccounts((ArrayList<IAccount>) ledger.getAccounts());
             controller.setDate(extractDateFromPicker());
-            controller.setMovementTableView(movementsTable);
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Movement");
@@ -86,7 +84,7 @@ public class TransactionDialog implements Initializable {
                 Transaction transaction = new Transaction(UUID.randomUUID().toString(), imovements, generateTags(),
                         extractDateFromPicker(), nameField.getText());
                 ledger.addTransaction(transaction);
-                closeWindow();
+                close();
             } else {
                 transaction.setDate(extractDateFromPicker());
                 transaction.setName(nameField.getText());
@@ -94,13 +92,13 @@ public class TransactionDialog implements Initializable {
                 imovements.clear();
                 imovements.addAll(movements);
                 transaction.setMovements(imovements);
-                ListsUtils.searchTransactionAndReplaceIt(transaction, ledger);
-                closeWindow();
+                ListUtils.searchTransactionAndReplaceIt(transaction, ledger);
+                close();
             }
         }
     }
 
-    private void closeWindow() {
+    private void close() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
@@ -142,7 +140,7 @@ public class TransactionDialog implements Initializable {
     }
 
     public void cancel(ActionEvent actionEvent) {
-        closeWindow();
+        close();
     }
 
     private void setErrorMessage(String msg) {
@@ -161,13 +159,15 @@ public class TransactionDialog implements Initializable {
     }
 
     private void unpack() {
-        movements = ListsUtils.transformIMovements(transaction.getMovements());
+        movements = ListUtils.transformIMovements(transaction.getMovements());
         imovements = transaction.getMovements();
         nameField.setText(transaction.getName());
         tagsField.setText(generateStringOfTags());
         datePicker.setValue(transaction.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         movementsTable.getItems().clear();
         movementsTable.getItems().addAll(movements);
+        addMovementButton.setDisable(true);
+        datePicker.setDisable(true);
     }
 
     private String generateStringOfTags() {
@@ -198,4 +198,6 @@ public class TransactionDialog implements Initializable {
         TableView.TableViewSelectionModel<Movement> selectionModel = movementsTable.getSelectionModel();
         selectionModel.setSelectionMode(SelectionMode.SINGLE);
     }
+
+
 }

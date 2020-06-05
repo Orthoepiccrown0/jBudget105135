@@ -15,7 +15,10 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.ResourceBundle;
 
 public class MovementDialog implements Initializable {
     public TextArea description;
@@ -35,14 +38,9 @@ public class MovementDialog implements Initializable {
     private List<Movement> movements;
     private List<IAccount> accounts;
     private Date date;
-    private TableView<Movement> movementTableView;
-
     //used to display details of already existing movement
     private Movement movement;
 
-    public void setMovementTableView(TableView<Movement> movementTableView) {
-        this.movementTableView = movementTableView;
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -65,8 +63,8 @@ public class MovementDialog implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue,
                                 String newValue) {
-                if (!newValue.matches("\\d*")) {
-                    amount.setText(newValue.replaceAll("[^\\d]", ""));
+                if (!newValue.matches("\\d{0,7}([\\.]\\d{0,4})?")) {
+                    amount.setText(oldValue);
                 }
             }
         });
@@ -78,10 +76,6 @@ public class MovementDialog implements Initializable {
 
     public void setMovement(Movement movement) {
         this.movement = movement;
-        unpack();
-    }
-
-    private void unpack() {
     }
 
     public void submitAction(ActionEvent actionEvent) {
@@ -92,11 +86,9 @@ public class MovementDialog implements Initializable {
                     parseTags(), new Date());
             movements.add(movement);
             account.addMovement(movement);
-            Stage stage = (Stage) okButton.getScene().getWindow();
-            stage.close();
+            close();
         }
     }
-
 
 
     private List<ITag> parseTags() {
@@ -200,8 +192,15 @@ public class MovementDialog implements Initializable {
     public void setDate(Date date) {
         this.date = date;
         datePicker.setValue(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        datePicker.setDisable(true);
+    }
+
+    private void close() {
+        Stage stage = (Stage) okButton.getScene().getWindow();
+        stage.close();
     }
 
     public void cancelAction(ActionEvent actionEvent) {
+        close();
     }
 }
