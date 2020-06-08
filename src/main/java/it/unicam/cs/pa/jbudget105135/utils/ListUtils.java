@@ -1,18 +1,18 @@
 package it.unicam.cs.pa.jbudget105135.utils;
 
-import it.unicam.cs.pa.jbudget105135.classes.Account;
-import it.unicam.cs.pa.jbudget105135.classes.Ledger;
-import it.unicam.cs.pa.jbudget105135.classes.Movement;
-import it.unicam.cs.pa.jbudget105135.classes.Transaction;
-import it.unicam.cs.pa.jbudget105135.interfaces.IAccount;
-import it.unicam.cs.pa.jbudget105135.interfaces.ILedger;
-import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
-import it.unicam.cs.pa.jbudget105135.interfaces.ITransaction;
+import it.unicam.cs.pa.jbudget105135.classes.*;
+import it.unicam.cs.pa.jbudget105135.interfaces.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ListUtils {
+
+    /**
+     * transform list of Interfaces into implementing classes
+     * @param iMovements list of interfaces
+     * @return implementing classes
+     */
     public static List<Movement> transformIMovements(List<IMovement> iMovements) {
         List<Movement> movements = new ArrayList<>();
         for (IMovement m : iMovements) {
@@ -52,36 +52,86 @@ public class ListUtils {
         return acc;
     }
 
-    public static void searchTransactionAndReplaceIt(Transaction transaction, ILedger ledger){
+    public static List<ScheduledTransaction> transformIScheduled(List<IScheduledTransaction> iScheduledTransactions) {
+        List<ScheduledTransaction> tr = new ArrayList<>();
+        for (IScheduledTransaction m : iScheduledTransactions) {
+            tr.add(new ScheduledTransaction(m.getID(),
+                    m.getDescription(),
+                    m.getTransaction(),
+                    m.isCompleted()
+                   ));
+        }
+        return tr;
+    }
+
+    /**
+     * replacement of transaction(to save new name etc.)
+     * @param transaction transactionto be saved
+     * @param ledger current ledger
+     */
+    public static void searchTransactionAndReplaceIt(Transaction transaction, ILedger ledger) {
         for (int i = 0; i < ledger.getTransactions().size(); i++) {
             Transaction t = (Transaction) ledger.getTransactions().get(i);
-            if(transaction.getID().equals(t.getID()))
-                ledger.getTransactions().set(i,transaction);
+            if (transaction.getID().equals(t.getID()))
+                ledger.getTransactions().set(i, transaction);
         }
     }
 
-    public static void searchTransactionDeleteIt(Transaction transaction, ILedger ledger){
+    /**
+     * complete deleting of transaction
+     * @param transaction transaction to be deleted
+     * @param ledger current ledger
+     */
+    public static void searchTransactionDeleteIt(Transaction transaction, ILedger ledger) {
         for (int i = 0; i < ledger.getTransactions().size(); i++) {
             Transaction t = (Transaction) ledger.getTransactions().get(i);
-            if(transaction.getID().equals(t.getID())) {
+            if (transaction.getID().equals(t.getID())) {
                 removeMovementsFromAccount(t.getMovements(), ledger);
                 ledger.getTransactions().remove(t);
             }
         }
     }
 
+    /**
+     * deleting of movements in account
+     * @param movements movements to be deleted
+     * @param ledger current ledger
+     */
     private static void removeMovementsFromAccount(List<IMovement> movements, ILedger ledger) {
-        for (IAccount acc:ledger.getAccounts()) {
+        for (IAccount acc : ledger.getAccounts()) {
             acc.getMovements().removeAll(movements);
         }
     }
 
-    public static void searchAccountAndReplaceIt(Account account, ILedger ledger){
+    /**
+     * search of account and its replacement
+     * @param account account to be replaced
+     * @param ledger current ledger
+     */
+    public static void searchAccountAndReplaceIt(Account account, ILedger ledger) {
         for (int i = 0; i < ledger.getTransactions().size(); i++) {
             Account t = (Account) ledger.getAccounts().get(i);
-            if(account.getID().equals(t.getID()))
-                ledger.getAccounts().set(i,account);
+            if (account.getID().equals(t.getID()))
+                ledger.getAccounts().set(i, account);
         }
+    }
+
+    /**
+     * searching movements by tag
+     * @param movements list of movements to search from
+     * @param tags tags to search for
+     * @return
+     */
+    public static List<IMovement> searchMovementsByTag(List<IMovement> movements, String... tags) {
+        List<IMovement> movementsByTag = new ArrayList<>();
+        for (String tag : tags) {
+            for (IMovement movement : movements) {
+                Tag t = new Tag(tag);
+                if (movement.tags().contains(t))
+                    movementsByTag.add(movement);
+            }
+        }
+        return movementsByTag;
     }
 
 }

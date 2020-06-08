@@ -16,8 +16,14 @@ import java.nio.file.Paths;
 
 public class FileManager {
 
+    /**
+     * load data from file
+     * @param path path of file
+     * @param main link to the main class where ledger has to be imported;
+     *             no other solutions was found
+     */
     public static void loadDataFromFile(String path, Main main) {
-        Task task = new Task<String>() {
+        Task<String> task = new Task<>() {
             @Override
             public String call() throws InterruptedException, IOException {
                 return readFile(path, StandardCharsets.UTF_8);
@@ -38,15 +44,20 @@ public class FileManager {
                 main.setLedger(ledger);
             }
 
-
         };
         main.progressBar.setVisible(true);
         new Thread(task).start();
 
     }
 
+    /**
+     * save all data into file rewriting it
+     * @param path path to file
+     * @param main link to main class to visualise progress
+     * @param data data to be saved
+     */
     public static void saveToFile(String path, Main main, String data) {
-        Task task = new Task<Path>() {
+        Task<Path> task = new Task<>() {
             @Override
             public Path call() throws InterruptedException, IOException {
                 return writeFile(path, data);

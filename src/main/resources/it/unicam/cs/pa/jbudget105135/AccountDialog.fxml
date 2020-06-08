@@ -19,11 +19,11 @@
             <TextField fx:id="openingBalanceField" layoutX="45.0" layoutY="211.0" promptText="Opening balance" />
             <Label fx:id="balanceLabel" layoutX="45.0" layoutY="283.0" prefHeight="17.0" prefWidth="45.0" text="Balance:" />
             <ComboBox fx:id="typeField" layoutX="45.0" layoutY="245.0" prefWidth="150.0" promptText="Type" />
-            <TableView fx:id="movementsTable" layoutX="203.0" layoutY="74.0" prefHeight="195.0" prefWidth="306.0">
+            <TableView fx:id="movementsTable" layoutX="203.0" layoutY="48.0" prefHeight="221.0" prefWidth="306.0">
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy></TableView>
-            <Label layoutX="325.0" layoutY="52.0" text="Movements" />
+            <Label layoutX="317.0" layoutY="275.0" text="Movements" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="200.0" layoutY="293.0" prefHeight="55.0" prefWidth="570.0" styleClass="centralpane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0">

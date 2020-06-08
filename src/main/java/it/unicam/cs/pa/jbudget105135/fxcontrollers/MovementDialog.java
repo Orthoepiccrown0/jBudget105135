@@ -38,6 +38,8 @@ public class MovementDialog implements Initializable {
     private List<Movement> movements;
     private List<IAccount> accounts;
     private Date date;
+    private List<ITag> tagsList;
+
     //used to display details of already existing movement
     private Movement movement;
 
@@ -47,6 +49,10 @@ public class MovementDialog implements Initializable {
         forceNumericInputOnAmount();
         fillMovementTypesBox();
 
+    }
+
+    public void setTagsList(List<ITag> tagsList) {
+        this.tagsList = tagsList;
     }
 
     private void fillMovementTypesBox() {
@@ -85,6 +91,7 @@ public class MovementDialog implements Initializable {
                     movementType.getSelectionModel().getSelectedItem(),
                     parseTags(), new Date());
             movements.add(movement);
+            tagsList.addAll(parseTags());
             account.addMovement(movement);
             close();
         }

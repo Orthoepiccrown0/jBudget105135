@@ -1,13 +1,15 @@
 package it.unicam.cs.pa.jbudget105135.fxcontrollers;
 
 import it.unicam.cs.pa.jbudget105135.classes.Movement;
-import it.unicam.cs.pa.jbudget105135.classes.Tag;
+import it.unicam.cs.pa.jbudget105135.classes.ScheduledTransaction;
 import it.unicam.cs.pa.jbudget105135.classes.Transaction;
 import it.unicam.cs.pa.jbudget105135.interfaces.IAccount;
 import it.unicam.cs.pa.jbudget105135.interfaces.ILedger;
 import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITag;
 import it.unicam.cs.pa.jbudget105135.utils.ListUtils;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -35,10 +37,13 @@ public class TransactionDialog implements Initializable {
     public Button cancelButton;
     public Label error;
     public DatePicker datePicker;
+
     private ILedger ledger;
 
     public List<Movement> movements = new ArrayList<>();
     private List<IMovement> imovements = new ArrayList<>();
+    private List<ITag> tags = new ArrayList<>();
+    private boolean scheduled;
 
     //transaction to show
     private Transaction transaction;
@@ -50,18 +55,20 @@ public class TransactionDialog implements Initializable {
             return;
         }
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../newMovementDialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../MovementDialog.fxml"));
             Parent root = loader.load();
             MovementDialog controller = loader.getController();
             controller.setMovements(movements);
             controller.setAccounts((ArrayList<IAccount>) ledger.getAccounts());
             controller.setDate(extractDateFromPicker());
+            controller.setTagsList(tags);
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Movement");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.showAndWait();
+            tagsField.setText(generateStringOfTags(tags));
             refreshTable();
         } catch (IOException e) {
             e.printStackTrace();
@@ -80,15 +87,25 @@ public class TransactionDialog implements Initializable {
     public void addTransaction(ActionEvent actionEvent) {
         if (isValidTransaction()) {
             if (transaction == null) {
+                imovements.clear();
                 imovements.addAll(movements);
-                Transaction transaction = new Transaction(UUID.randomUUID().toString(), imovements, generateTags(),
+                Transaction transaction = new Transaction(UUID.randomUUID().toString(), imovements, tags,
                         extractDateFromPicker(), nameField.getText());
-                ledger.addTransaction(transaction);
+                if (scheduled) {
+                    String description = requestDescription();
+                    if(description.equals(""))
+                        displayQuitMessage();
+                    ScheduledTransaction scheduledTransaction = new ScheduledTransaction(description,transaction);
+                    ledger.addScheduledTransaction(scheduledTransaction);
+                } else {
+                    ledger.addTransaction(transaction);
+                }
+                ledger.addTags(tags);
                 close();
             } else {
                 transaction.setDate(extractDateFromPicker());
                 transaction.setName(nameField.getText());
-                transaction.setTags(generateTags());
+                transaction.setTags(tags);
                 imovements.clear();
                 imovements.addAll(movements);
                 transaction.setMovements(imovements);
@@ -98,19 +115,27 @@ public class TransactionDialog implements Initializable {
         }
     }
 
+    private void displayQuitMessage() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Maybe we are misunderstood");
+        alert.setContentText("Looks like u don't want to create scheduled transaction, bye! >:(");
+
+        alert.showAndWait();
+
+    }
+
+    private String requestDescription() {
+
+        TextInputDialog td = new TextInputDialog("Enter description for scheduled transaction");
+        td.setHeaderText("Transaction description");
+        td.showAndWait();
+        return td.getEditor().getText();
+    }
+
     private void close() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
-    }
-
-    private List<ITag> generateTags() {
-        List<ITag> tags = new ArrayList<>();
-        String[] data = tagsField.getText().split(",");
-        for (String name : data) {
-            tags.add(new Tag(name));
-        }
-
-        return tags;
     }
 
     private boolean isValidTransaction() {
@@ -150,6 +175,7 @@ public class TransactionDialog implements Initializable {
 
     public void setLedger(ILedger ledger) {
         this.ledger = ledger;
+        setDateRange();
     }
 
     public void setTransaction(Transaction transaction) {
@@ -162,7 +188,7 @@ public class TransactionDialog implements Initializable {
         movements = ListUtils.transformIMovements(transaction.getMovements());
         imovements = transaction.getMovements();
         nameField.setText(transaction.getName());
-        tagsField.setText(generateStringOfTags());
+        tagsField.setText(generateStringOfTags(transaction.getTags()));
         datePicker.setValue(transaction.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         movementsTable.getItems().clear();
         movementsTable.getItems().addAll(movements);
@@ -170,12 +196,12 @@ public class TransactionDialog implements Initializable {
         datePicker.setDisable(true);
     }
 
-    private String generateStringOfTags() {
+    private String generateStringOfTags(List<ITag> target) {
         ArrayList<String> tags = new ArrayList<>();
-        for (ITag tag:transaction.getTags()) {
+        for (ITag tag : target) {
             tags.add(tag.toString());
         }
-        return String.join(",",  tags);
+        return String.join(",", tags);
     }
 
     private void setActionButtonsForView() {
@@ -194,10 +220,48 @@ public class TransactionDialog implements Initializable {
         column2.setCellValueFactory(new PropertyValueFactory<>("amount"));
         TableColumn<Movement, Double> column3 = new TableColumn<>("Type");
         column3.setCellValueFactory(new PropertyValueFactory<>("type"));
-        movementsTable.getColumns().addAll(column1, column2, column3);
+        TableColumn<Movement, Date> column4 = new TableColumn<>("Tags");
+        column4.setCellValueFactory(new PropertyValueFactory<>("tagsString"));
+        movementsTable.getColumns().addAll(column1, column2, column3, column4);
         TableView.TableViewSelectionModel<Movement> selectionModel = movementsTable.getSelectionModel();
         selectionModel.setSelectionMode(SelectionMode.SINGLE);
     }
 
+    public void setScheduled(boolean scheduled) {
+        this.scheduled = scheduled;
+        setDateRange();
+    }
 
+    /**
+     * set date range for scheduled transaction(only future dates are available)
+     * and for normal transactions
+     */
+    private void setDateRange() {
+        LocalDate now = LocalDate.now();
+        datePicker.valueProperty().addListener(new ChangeListener<LocalDate>() {
+            @Override
+            public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
+                if (scheduled) {
+                    if (newValue.isBefore(now) || newValue.isEqual(now)) {
+                        datePicker.setValue(now.plusDays(1));
+                    }
+                } else {
+                    if (newValue.isAfter(now)) {
+                        datePicker.setValue(now);
+                        System.out.println(now.toString());
+                        System.out.println(newValue.toString());
+                    }
+                }
+            }
+        });
+
+        datePicker.setDayCellFactory(d ->
+                new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                    }
+                });
+    }
 }

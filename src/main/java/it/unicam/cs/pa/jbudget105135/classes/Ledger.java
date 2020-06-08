@@ -3,18 +3,15 @@ package it.unicam.cs.pa.jbudget105135.classes;
 import it.unicam.cs.pa.jbudget105135.AccountType;
 import it.unicam.cs.pa.jbudget105135.interfaces.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Ledger implements ILedger {
 
     private final List<IAccount> accounts;
     private final List<ITransaction> transactions;
     private final List<IScheduledTransaction> scheduledTransactions;
-    private final List<ITag> tags;
-    private String ID;
+    private final Set<ITag> tags;
+    private final String ID;
 
 
     /**
@@ -35,16 +32,12 @@ public class Ledger implements ILedger {
         this.accounts = new ArrayList<>();
         this.transactions = new ArrayList<>();
         this.scheduledTransactions = new ArrayList<>();
-        this.tags = new ArrayList<>();
+        this.tags = new HashSet<>();
         this.ID = UUID.randomUUID().toString();
     }
 
     public String getID() {
         return ID;
-    }
-
-    public void setID(String ID) {
-        this.ID = ID;
     }
 
     @Override
@@ -68,7 +61,12 @@ public class Ledger implements ILedger {
     }
 
     @Override
-    public List<ITag> getTags() {
+    public List<IScheduledTransaction> getScheduledTransaction() {
+        return scheduledTransactions;
+    }
+
+    @Override
+    public Set<ITag> getTags() {
         return tags;
     }
 
@@ -80,6 +78,11 @@ public class Ledger implements ILedger {
     @Override
     public boolean addTag(String name, String description) {
         return tags.add(new Tag(name));
+    }
+
+    @Override
+    public boolean addTags(List<ITag> tags){
+        return this.tags.addAll(tags);
     }
 
     @Override

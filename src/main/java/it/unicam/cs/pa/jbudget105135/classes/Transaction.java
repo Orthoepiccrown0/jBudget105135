@@ -96,6 +96,14 @@ public class Transaction implements ITransaction {
         }
     }
 
+    public String getTagsString(){
+        ArrayList<String> tagsStringList = new ArrayList<>();
+        for (ITag tag:tags) {
+            tagsStringList.add(tag.toString());
+        }
+        return String.join(",",  tagsStringList);
+    }
+
     public int getNumberOfMovements() {
         return movements.size();
     }

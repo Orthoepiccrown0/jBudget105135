@@ -1,10 +1,8 @@
 package it.unicam.cs.pa.jbudget105135.classes;
 
 import it.unicam.cs.pa.jbudget105135.MovementType;
-import it.unicam.cs.pa.jbudget105135.interfaces.IAccount;
 import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITag;
-import it.unicam.cs.pa.jbudget105135.interfaces.ITransaction;
 
 import java.util.*;
 
@@ -74,6 +72,14 @@ public class Movement implements IMovement {
         Movement movement = (Movement) o;
         return ID.equals(movement.ID) &&
                 description.equals(movement.description);
+    }
+
+    public String getTagsString(){
+        ArrayList<String> tagsStringList = new ArrayList<>();
+        for (ITag tag:tags) {
+            tagsStringList.add(tag.toString());
+        }
+        return String.join(",",  tagsStringList);
     }
 
     @Override

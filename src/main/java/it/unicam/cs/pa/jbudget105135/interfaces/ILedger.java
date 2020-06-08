@@ -4,6 +4,7 @@ import it.unicam.cs.pa.jbudget105135.AccountType;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public interface ILedger {
     List<IAccount> getAccounts();
@@ -14,11 +15,15 @@ public interface ILedger {
 
     List<ITransaction> getTransactions();
 
-    List<ITag> getTags();
+    List<IScheduledTransaction> getScheduledTransaction();
+
+    Set<ITag> getTags();
 
     boolean addAccount(AccountType accountType, String name, String description, double openingBalance);
 
     boolean addTag(String name, String description);
+
+    boolean addTags(List<ITag> tags);
 
     boolean addScheduledTransaction(IScheduledTransaction scheduledTransaction);
 

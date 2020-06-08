@@ -1,26 +1,54 @@
 package it.unicam.cs.pa.jbudget105135.classes;
 
-import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
 import it.unicam.cs.pa.jbudget105135.interfaces.IScheduledTransaction;
-import it.unicam.cs.pa.jbudget105135.interfaces.ITag;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITransaction;
 
 import java.util.Date;
-import java.util.List;
+import java.util.UUID;
 
-public class ScheduledTransaction implements ITransaction, IScheduledTransaction {
+public class ScheduledTransaction implements IScheduledTransaction {
+
+    private String ID;
+    private String description;
+    private ITransaction transaction;
+    private boolean completed;
+
+
+    public ScheduledTransaction(String description, ITransaction transactions) {
+        this.ID = UUID.randomUUID().toString();
+        this.description = description;
+        this.transaction = transactions;
+        this.completed = false;
+    }
+
+    /**
+     * restore scheduled transaction
+     * @param ID
+     * @param description
+     * @param transaction
+     * @param completed
+     */
+    public ScheduledTransaction(String ID, String description, ITransaction transaction, boolean completed) {
+        this.ID = ID;
+        this.description = description;
+        this.transaction = transaction;
+        this.completed = completed;
+    }
+
+
+
     @Override
     public String getDescription() {
-        return null;
+        return description;
     }
 
     @Override
-    public void setDescription(String description) {
-
+    public ITransaction getTransaction() {
+        return transaction;
     }
 
     @Override
-    public List<ITransaction> getTransaction(Date date) {
+    public ITransaction getTransaction(Date date) {
         return null;
     }
 
@@ -31,51 +59,10 @@ public class ScheduledTransaction implements ITransaction, IScheduledTransaction
 
     @Override
     public String getID() {
-        return null;
+        return ID;
     }
 
-    @Override
-    public String getName() {
-        return null;
-    }
-
-    @Override
-    public List<IMovement> getMovements() {
-        return null;
-    }
-
-    @Override
-    public void addMovement(IMovement movement) {
-
-    }
-
-    @Override
-    public boolean removeMovement(IMovement movement) {
-        return false;
-    }
-
-    @Override
-    public List<ITag> getTags() {
-        return null;
-    }
-
-    @Override
-    public boolean addTag(ITag ITag) {
-        return false;
-    }
-
-    @Override
-    public boolean removeTag(ITag ITag) {
-        return false;
-    }
-
-    @Override
-    public double getTotalAmount() {
-        return 0;
-    }
-
-    @Override
-    public Date getDate() {
-        return null;
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 }
