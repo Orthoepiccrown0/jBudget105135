@@ -2,6 +2,7 @@ package it.unicam.cs.pa.jbudget105135.fxcontrollers;
 
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import it.unicam.cs.pa.jbudget105135.AccountType;
 import it.unicam.cs.pa.jbudget105135.MovementType;
 import it.unicam.cs.pa.jbudget105135.classes.*;
@@ -63,7 +64,7 @@ public class Main implements Initializable {
     public TextField searchField;
     public DatePicker dateField;
 
-    private Gson GLedger = new Gson();
+    private Gson GLedger = new GsonBuilder().setPrettyPrinting().create();
     private ILedger ledger;
     private File saveFile;
 
@@ -96,9 +97,8 @@ public class Main implements Initializable {
 
     /**
      * search movements by tag
-     * @param actionEvent
      */
-    public void searchByTag(ActionEvent actionEvent) {
+    public void searchByTag() {
         if (searchField.getText().trim().length() > 0) {
             List<IMovement> tmpMovements = new ArrayList<>();
             for (IAccount account : ledger.getAccounts())
@@ -112,16 +112,14 @@ public class Main implements Initializable {
 
     /**
      * search scheduled transaction by date
-     * @param actionEvent
      */
-    public void searchByDate(ActionEvent actionEvent) {
+    public void searchByDate() {
     }
 
     /**
      * Switch current tab to transactions tab
-     * @param contextMenuEvent
      */
-    public void switchToTransactions(MouseEvent contextMenuEvent) {
+    public void switchToTransactions() {
         currentPage = PageType.TRANSACTIONS;
         page.setVisible(true);
         page.setText("Transactions");
@@ -135,9 +133,8 @@ public class Main implements Initializable {
 
     /**
      * Switch current tab to accounts tab
-     * @param mouseEvent
      */
-    public void switchToAccounts(MouseEvent mouseEvent) {
+    public void switchToAccounts() {
         currentPage = PageType.ACCOUNTS;
         page.setVisible(true);
         page.setText("Accounts");
@@ -151,9 +148,8 @@ public class Main implements Initializable {
 
     /**
      * Switch current tab to search by tags tab
-     * @param mouseEvent
      */
-    public void switchToTags(MouseEvent mouseEvent) {
+    public void switchToTags() {
         currentPage = PageType.TAGS;
         page.setVisible(true);
         page.setText("Movements by Tags");
@@ -166,9 +162,8 @@ public class Main implements Initializable {
 
     /**
      * Switch current tab to ScheduledTransactions tab
-     * @param mouseEvent
      */
-    public void switchToScheduledTransactions(MouseEvent mouseEvent) {
+    public void switchToScheduledTransactions() {
         currentPage = PageType.SCHEDULED_TRANSACTION;
         page.setVisible(true);
         page.setText("Scheduled transactions");
@@ -181,9 +176,8 @@ public class Main implements Initializable {
 
     /**
      * creating of new file in specific directory by using FileChooser
-     * @param mouseEvent
      */
-    public void createNewFile(MouseEvent mouseEvent) {
+    public void createNewFile() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save jBudget file");
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("JSON files", "*.json");
@@ -197,7 +191,7 @@ public class Main implements Initializable {
             ledger.addAccount(AccountType.ASSETS, "name", "description", 1500);
             noFileSelectedPane.setVisible(false);
             unlockMenu();
-            switchToAccounts(null);
+            switchToAccounts();
             addNewAccount();
         }
 
@@ -205,9 +199,8 @@ public class Main implements Initializable {
 
     /**
      * loading from chosen file on mouse click
-     * @param mouseEvent
      */
-    public void loadFromFile(MouseEvent mouseEvent) {
+    public void loadFromFile() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open jBudget .json file");
         FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("JSON files", "*.json");
@@ -218,7 +211,7 @@ public class Main implements Initializable {
             FileManager.loadDataFromFile(saveFile.getPath(), this);
             noFileSelectedPane.setVisible(false);
             unlockMenu();
-            switchToTransactions(null);
+            switchToTransactions();
         }
     }
 
@@ -236,7 +229,7 @@ public class Main implements Initializable {
         tagsBPane.setDisable(true);
     }
 
-    public void firstAction(ActionEvent actionEvent) {
+    public void firstAction() {
         if (currentPage == PageType.TRANSACTIONS) {
             addNewTransaction();
         } else if (currentPage == PageType.ACCOUNTS) {
@@ -247,7 +240,7 @@ public class Main implements Initializable {
     }
 
 
-    public void secondAction(ActionEvent actionEvent) {
+    public void secondAction() {
         if (currentPage == PageType.TRANSACTIONS) {
             deleteSelectedItem();
         } else if (currentPage == PageType.ACCOUNTS) {
@@ -267,7 +260,7 @@ public class Main implements Initializable {
         saveChanges();
     }
 
-    public void thirdAction(ActionEvent actionEvent) {
+    public void thirdAction() {
         //future implementations
     }
 
@@ -281,7 +274,8 @@ public class Main implements Initializable {
 
     private void setupActionButtonsForScheduledTransactions() {
         setDeleteAndAddButtons();
-        showSearchByDate();
+//        showSearchByDate();
+        //todo:finish search by date
     }
 
     private void setDeleteAndAddButtons() {
@@ -519,6 +513,8 @@ public class Main implements Initializable {
      */
     public void setLedger(ILedger ledger) {
         this.ledger = ledger;
+        if(ListUtils.executeScheduledTransactions(ledger))
+            saveChanges();
         refreshTables();
     }
 

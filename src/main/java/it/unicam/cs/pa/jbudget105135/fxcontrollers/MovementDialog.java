@@ -14,6 +14,8 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
@@ -63,7 +65,9 @@ public class MovementDialog implements Initializable {
         accountBox.getItems().addAll(accounts);
     }
 
-    //force amount input to numbers-only
+    /**
+     * forced numeric amount
+     */
     private void forceNumericInputOnAmount() {
         amount.textProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -76,10 +80,18 @@ public class MovementDialog implements Initializable {
         });
     }
 
+    /**
+     * List of movements used in transaction
+     * @param movements
+     */
     public void setMovements(List<Movement> movements) {
         this.movements = movements;
     }
 
+    /**
+     * displaying of movement
+     * @param movement movement to show
+     */
     public void setMovement(Movement movement) {
         this.movement = movement;
     }
@@ -89,12 +101,18 @@ public class MovementDialog implements Initializable {
             IAccount account = accountBox.getSelectionModel().getSelectedItem();
             Movement movement = new Movement(description.getText(), Double.parseDouble(amount.getText()),
                     movementType.getSelectionModel().getSelectedItem(),
-                    parseTags(), new Date());
+                    parseTags(), extractDateFromPicker());
             movements.add(movement);
             tagsList.addAll(parseTags());
             account.addMovement(movement);
             close();
         }
+    }
+
+    private Date extractDateFromPicker() {
+        LocalDate localDate = datePicker.getValue();
+        Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+        return Date.from(instant);
     }
 
 
@@ -156,6 +174,10 @@ public class MovementDialog implements Initializable {
         return true;
     }
 
+    /**
+     * checks if you can afford this movement with selected account
+     * @return true if you can, false otherwise
+     */
     private boolean canAffordIt() {
         IAccount account = this.accountBox.getSelectionModel().getSelectedItem();
         MovementType type = this.movementType.getSelectionModel().getSelectedItem();
@@ -191,6 +213,10 @@ public class MovementDialog implements Initializable {
         errorMessage.setText(s);
     }
 
+    /**
+     * accounts to display
+     * @param accounts
+     */
     public void setAccounts(ArrayList<IAccount> accounts) {
         this.accounts = accounts;
         fillAccountsBox();

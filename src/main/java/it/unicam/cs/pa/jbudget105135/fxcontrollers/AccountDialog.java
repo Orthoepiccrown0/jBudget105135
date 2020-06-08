@@ -73,10 +73,18 @@ public class AccountDialog implements Initializable {
         });
     }
 
+    /**
+     * set current ledger to work
+     * @param ledger
+     */
     public void setLedger(ILedger ledger) {
         this.ledger = ledger;
     }
 
+    /**
+     * display account
+     * @param account
+     */
     public void setAccount(Account account) {
         this.account = account;
         unpack();
@@ -129,6 +137,10 @@ public class AccountDialog implements Initializable {
         ledger.addAccount(type, name, desc, openingBalance);
     }
 
+    /**
+     * before submit check if it is a valid account
+     * @return true if so, false otherwise
+     */
     private boolean isValidAccount() {
         if (nameField.getText().trim().length() == 0) {
             setErrorMessage("Error: please insert name");

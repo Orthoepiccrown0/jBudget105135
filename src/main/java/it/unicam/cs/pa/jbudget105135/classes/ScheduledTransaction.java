@@ -35,8 +35,6 @@ public class ScheduledTransaction implements IScheduledTransaction {
         this.completed = completed;
     }
 
-
-
     @Override
     public String getDescription() {
         return description;
@@ -54,7 +52,12 @@ public class ScheduledTransaction implements IScheduledTransaction {
 
     @Override
     public boolean isCompleted() {
-        return false;
+        return completed;
+    }
+
+    @Override
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 
     @Override
@@ -62,7 +65,5 @@ public class ScheduledTransaction implements IScheduledTransaction {
         return ID;
     }
 
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
-    }
+
 }

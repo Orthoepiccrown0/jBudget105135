@@ -12,5 +12,7 @@ public interface IScheduledTransaction {
 
     boolean isCompleted();
 
+    void setCompleted(boolean completed);
+
     String getID();
 }

@@ -3,13 +3,17 @@ package it.unicam.cs.pa.jbudget105135.utils;
 import it.unicam.cs.pa.jbudget105135.classes.*;
 import it.unicam.cs.pa.jbudget105135.interfaces.*;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ListUtils {
 
     /**
      * transform list of Interfaces into implementing classes
+     *
      * @param iMovements list of interfaces
      * @return implementing classes
      */
@@ -59,15 +63,16 @@ public class ListUtils {
                     m.getDescription(),
                     m.getTransaction(),
                     m.isCompleted()
-                   ));
+            ));
         }
         return tr;
     }
 
     /**
      * replacement of transaction(to save new name etc.)
+     *
      * @param transaction transactionto be saved
-     * @param ledger current ledger
+     * @param ledger      current ledger
      */
     public static void searchTransactionAndReplaceIt(Transaction transaction, ILedger ledger) {
         for (int i = 0; i < ledger.getTransactions().size(); i++) {
@@ -79,8 +84,9 @@ public class ListUtils {
 
     /**
      * complete deleting of transaction
+     *
      * @param transaction transaction to be deleted
-     * @param ledger current ledger
+     * @param ledger      current ledger
      */
     public static void searchTransactionDeleteIt(Transaction transaction, ILedger ledger) {
         for (int i = 0; i < ledger.getTransactions().size(); i++) {
@@ -94,8 +100,9 @@ public class ListUtils {
 
     /**
      * deleting of movements in account
+     *
      * @param movements movements to be deleted
-     * @param ledger current ledger
+     * @param ledger    current ledger
      */
     private static void removeMovementsFromAccount(List<IMovement> movements, ILedger ledger) {
         for (IAccount acc : ledger.getAccounts()) {
@@ -105,8 +112,9 @@ public class ListUtils {
 
     /**
      * search of account and its replacement
+     *
      * @param account account to be replaced
-     * @param ledger current ledger
+     * @param ledger  current ledger
      */
     public static void searchAccountAndReplaceIt(Account account, ILedger ledger) {
         for (int i = 0; i < ledger.getTransactions().size(); i++) {
@@ -118,8 +126,9 @@ public class ListUtils {
 
     /**
      * searching movements by tag
+     *
      * @param movements list of movements to search from
-     * @param tags tags to search for
+     * @param tags      tags to search for
      * @return
      */
     public static List<IMovement> searchMovementsByTag(List<IMovement> movements, String... tags) {
@@ -134,4 +143,24 @@ public class ListUtils {
         return movementsByTag;
     }
 
+    /**
+     * executing of scheduled transaction and moving it to ledger transactions
+     * @param ledger current ledger
+     * @return true if any scheduled transaction were executed, false otherwise
+     */
+    public static boolean executeScheduledTransactions(ILedger ledger) {
+        LocalDate now = LocalDate.now();
+        for (IScheduledTransaction sTransaction : ledger.getScheduledTransaction()) {
+            Date date = sTransaction.getTransaction().getDate();
+            LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            if (now.isAfter(localDate) || now.isEqual(localDate)) {
+                if (!ledger.getTransactions().contains(sTransaction.getTransaction())) {
+                    ledger.addTransaction(sTransaction.getTransaction());
+                    sTransaction.setCompleted(true);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

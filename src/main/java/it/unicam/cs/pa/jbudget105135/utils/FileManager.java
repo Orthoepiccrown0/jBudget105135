@@ -69,7 +69,6 @@ public class FileManager {
                 main.progressBar.setVisible(false);
             }
 
-
         };
         main.progressBar.setVisible(true);
         new Thread(task).start();
