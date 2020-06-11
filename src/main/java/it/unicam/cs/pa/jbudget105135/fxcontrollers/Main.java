@@ -35,7 +35,7 @@ import java.util.ResourceBundle;
 
 /**
  * The class  {@code Main} contains methods that are used to display data
- * and interact with user
+ * and interact with it
  */
 public class Main implements Initializable {
     public Pane controlsPane;
@@ -71,6 +71,8 @@ public class Main implements Initializable {
     ArrayList<Transaction> transactions;
     ArrayList<Account> accounts;
     ArrayList<ScheduledTransaction> scheduledTransactions;
+
+
 
 
     private enum PageType {
@@ -114,6 +116,21 @@ public class Main implements Initializable {
      * search scheduled transaction by date
      */
     public void searchByDate() {
+        List<ScheduledTransaction> transactions =
+                ListUtils.searchScheduledTransactionByDate(scheduledTransactions,dateField.getValue());
+        if(transactions==null)
+            return;
+        scheduledTable.getItems().clear();
+        scheduledTable.getItems().addAll(transactions);
+    }
+
+    /**
+     * cancel search query
+     */
+    public void clearSearchByDate() {
+        dateField.setValue(null);
+        scheduledTable.getItems().clear();
+        scheduledTable.getItems().addAll(scheduledTransactions);
     }
 
     /**
@@ -187,8 +204,6 @@ public class Main implements Initializable {
         if (saveFile != null) {
             FileManager.saveToFile(saveFile.getPath(), this, "");
             ledger = new Ledger();
-            //todo: delete this account
-            ledger.addAccount(AccountType.ASSETS, "name", "description", 1500);
             noFileSelectedPane.setVisible(false);
             unlockMenu();
             switchToAccounts();
@@ -255,7 +270,7 @@ public class Main implements Initializable {
                 refreshTransactionsTable();
             }
         } else if (currentPage == PageType.ACCOUNTS) {
-            //todo: figure out if deleting of account is not useless and has some sort of sense
+            //todo: figure out if deleting of account is needed
         }
         saveChanges();
     }
@@ -274,8 +289,7 @@ public class Main implements Initializable {
 
     private void setupActionButtonsForScheduledTransactions() {
         setDeleteAndAddButtons();
-//        showSearchByDate();
-        //todo:finish search by date
+        showSearchByDate();
     }
 
     private void setDeleteAndAddButtons() {
@@ -360,9 +374,13 @@ public class Main implements Initializable {
         column1.setCellValueFactory(new PropertyValueFactory<>("description"));
         TableColumn<ScheduledTransaction, Boolean> column2 = new TableColumn<>("Completed");
         column2.setCellValueFactory(new PropertyValueFactory<>("completed"));
-        scheduledTable.getColumns().addAll(column1, column2);
+        TableColumn<ScheduledTransaction, Boolean> column3 = new TableColumn<>("Date");
+        column3.setCellValueFactory(new PropertyValueFactory<>("date"));
+        column1.setMinWidth(100);
+        scheduledTable.getColumns().addAll(column1, column2, column3);
         TableView.TableViewSelectionModel<ScheduledTransaction> selectionModel = scheduledTable.getSelectionModel();
         selectionModel.setSelectionMode(SelectionMode.SINGLE);
+        setScheduledTransactionsTableClickListeners();
     }
 
     /**
@@ -415,6 +433,20 @@ public class Main implements Initializable {
                 }
             }
         });
+    }
+
+    private void setScheduledTransactionsTableClickListeners() {
+        scheduledTable.setRowFactory(tv -> {
+            TableRow<ScheduledTransaction> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    ScheduledTransaction scheduledTransaction = row.getItem();
+                    displayTransaction((Transaction) scheduledTransaction.getTransaction());
+                }
+            });
+            return row;
+        });
+
     }
 
     private void displayAccount(Account account) {

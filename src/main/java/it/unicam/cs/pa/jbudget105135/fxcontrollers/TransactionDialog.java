@@ -248,8 +248,6 @@ public class TransactionDialog implements Initializable {
                 } else {
                     if (newValue.isAfter(now)) {
                         datePicker.setValue(now);
-                        System.out.println(now.toString());
-                        System.out.println(newValue.toString());
                     }
                 }
             }

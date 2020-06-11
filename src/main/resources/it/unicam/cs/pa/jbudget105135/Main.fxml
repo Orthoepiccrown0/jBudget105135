@@ -122,10 +122,11 @@
                     </children>
                 </Pane>
 
-                <Pane fx:id="datePane" layoutX="14.0" layoutY="7.0" prefHeight="40.0" prefWidth="216.0" visible="false">
+                <Pane fx:id="datePane" layoutX="14.0" layoutY="7.0" prefHeight="40.0" prefWidth="271.0" visible="false">
                     <children>
                         <Button layoutX="180.0" layoutY="8.0" mnemonicParsing="false" onAction="#searchByDate" text="Go" />
                   <DatePicker fx:id="dateField" layoutY="8.0" promptText="Date of transaction" />
+                  <Button layoutX="218.0" layoutY="8.0" mnemonicParsing="false" onAction="#clearSearchByDate" text="Clear" />
                     </children>
                 </Pane>
             </children>

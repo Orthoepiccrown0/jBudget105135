@@ -6,7 +6,6 @@ import java.util.List;
 public interface IScheduledTransaction {
     String getDescription();
 
-    ITransaction getTransaction(Date date);
 
     ITransaction getTransaction();
 

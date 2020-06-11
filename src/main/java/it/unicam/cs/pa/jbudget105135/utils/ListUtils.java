@@ -143,8 +143,22 @@ public class ListUtils {
         return movementsByTag;
     }
 
+    public static List<ScheduledTransaction> searchScheduledTransactionByDate(List<ScheduledTransaction> scheduledTransactions,
+                                                                   LocalDate date) {
+        if(date==null)
+            return null;
+        List<ScheduledTransaction> movementsByDate = new ArrayList<>();
+        for (ScheduledTransaction transaction: scheduledTransactions){
+            LocalDate transactionDate = transaction.getDate();
+            if(transactionDate.isEqual(date))
+                movementsByDate.add(transaction);
+        }
+        return movementsByDate;
+    }
+
     /**
      * executing of scheduled transaction and moving it to ledger transactions
+     *
      * @param ledger current ledger
      * @return true if any scheduled transaction were executed, false otherwise
      */

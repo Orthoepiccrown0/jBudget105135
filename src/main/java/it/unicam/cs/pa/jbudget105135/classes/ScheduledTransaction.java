@@ -3,6 +3,8 @@ package it.unicam.cs.pa.jbudget105135.classes;
 import it.unicam.cs.pa.jbudget105135.interfaces.IScheduledTransaction;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITransaction;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.UUID;
 
@@ -46,11 +48,6 @@ public class ScheduledTransaction implements IScheduledTransaction {
     }
 
     @Override
-    public ITransaction getTransaction(Date date) {
-        return null;
-    }
-
-    @Override
     public boolean isCompleted() {
         return completed;
     }
@@ -65,5 +62,8 @@ public class ScheduledTransaction implements IScheduledTransaction {
         return ID;
     }
 
-
+    public LocalDate getDate(){
+        LocalDate date = transaction.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        return date;
+    }
 }
