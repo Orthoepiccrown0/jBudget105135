@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="567.0" prefWidth="755.0" stylesheets="@../../../../../css/style.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unicam.cs.pa.jbudget105135.fxcontrollers.AccountsView">
+    <children>
+        <TableView fx:id="table" layoutY="54.0" prefHeight="519.0" prefWidth="755.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="48.0" />
+        <Button layoutX="683.0" layoutY="12.0" mnemonicParsing="false" onAction="#addAccount" styleClass="greenButton" text="Add" AnchorPane.rightAnchor="34.0" AnchorPane.topAnchor="12.0" />
+        <Button fx:id="deleteButton" layoutX="622.0" layoutY="12.0" mnemonicParsing="false" onAction="#deleteAccount" styleClass="redButton" text="Delete" AnchorPane.rightAnchor="82.0" AnchorPane.topAnchor="12.0" />
+        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="345.0" layoutY="16.0" text="Accounts" AnchorPane.leftAnchor="345.0" AnchorPane.rightAnchor="344.0" AnchorPane.topAnchor="16.0" />
+    </children>
+</AnchorPane>

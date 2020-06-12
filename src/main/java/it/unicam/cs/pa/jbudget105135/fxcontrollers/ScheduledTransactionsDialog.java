@@ -90,4 +90,5 @@ public class ScheduledTransactionsDialog implements Initializable {
         stage.showAndWait();
 //        refreshTables();
     }
+
 }

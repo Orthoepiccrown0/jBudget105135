@@ -2,11 +2,12 @@ package it.unicam.cs.pa.jbudget105135.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import it.unicam.cs.pa.jbudget105135.Controller;
 import it.unicam.cs.pa.jbudget105135.classes.*;
-import it.unicam.cs.pa.jbudget105135.fxcontrollers.Main;
 import it.unicam.cs.pa.jbudget105135.interfaces.*;
 import javafx.concurrent.Task;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -18,21 +19,17 @@ public class FileManager {
 
     /**
      * load data from file
-     * @param path path of file
-     * @param main link to the main class where ledger has to be imported;
-     *             no other solutions was found
      */
-    public static void loadDataFromFile(String path, Main main) {
+    public static void loadDataFromFile(File file, IControllerCallback callback) {
         Task<String> task = new Task<>() {
             @Override
             public String call() throws InterruptedException, IOException {
-                return readFile(path, StandardCharsets.UTF_8);
+                return readFile(file.getPath(), StandardCharsets.UTF_8);
             }
 
             @Override
             protected void succeeded() {
                 super.succeeded();
-                main.progressBar.setVisible(false);
                 Gson gson = new GsonBuilder()
                         .registerTypeAdapter(IMovement.class, InterfaceSerializer.interfaceSerializer(Movement.class))
                         .registerTypeAdapter(ITransaction.class, InterfaceSerializer.interfaceSerializer(Transaction.class))
@@ -41,22 +38,22 @@ public class FileManager {
                         .registerTypeAdapter(IScheduledTransaction.class, InterfaceSerializer.interfaceSerializer(ScheduledTransaction.class))
                         .create();
                 Ledger ledger = gson.fromJson(getValue(), Ledger.class);
-                main.setLedger(ledger);
+                Controller controller = new Controller(ledger, file);
+                callback.setController(controller);
             }
 
         };
-        main.progressBar.setVisible(true);
         new Thread(task).start();
 
     }
 
     /**
      * save all data into file rewriting it
+     *
      * @param path path to file
-     * @param main link to main class to visualise progress
      * @param data data to be saved
      */
-    public static void saveToFile(String path, Main main, String data) {
+    public static void saveToFile(String path, String data) {
         Task<Path> task = new Task<>() {
             @Override
             public Path call() throws InterruptedException, IOException {
@@ -66,11 +63,9 @@ public class FileManager {
             @Override
             protected void succeeded() {
                 super.succeeded();
-                main.progressBar.setVisible(false);
             }
 
         };
-        main.progressBar.setVisible(true);
         new Thread(task).start();
     }
 
