@@ -2,23 +2,18 @@ package it.unicam.cs.pa.jbudget105135.model;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import it.unicam.cs.pa.jbudget105135.control.Controller;
 import it.unicam.cs.pa.jbudget105135.interfaces.*;
-import it.unicam.cs.pa.jbudget105135.model.*;
 import it.unicam.cs.pa.jbudget105135.utils.InterfaceSerializer;
-import javafx.concurrent.Task;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class FileManager implements IStoreManager{
 
-    private Gson gson;
+    private final Gson gson;
 
     public FileManager() {
         gson = new GsonBuilder()
@@ -30,13 +25,13 @@ public class FileManager implements IStoreManager{
                 .create();
     }
 
-    private String readFile(String path, Charset encoding) throws IOException {
+    private String readFile(String path) throws IOException {
         byte[] encoded = Files.readAllBytes(Paths.get(path));
-        return new String(encoded, encoding);
+        return new String(encoded, StandardCharsets.UTF_8);
     }
 
-    private Path writeFile(String path, String data) throws IOException {
-        return Files.write(Paths.get(path), data.getBytes());
+    private void writeFile(String path, String data) throws IOException {
+        Files.write(Paths.get(path), data.getBytes());
     }
 
     /**
@@ -61,7 +56,7 @@ public class FileManager implements IStoreManager{
     @Override
     public ILedger load(File file) {
         try {
-            String data = readFile(file.getPath(), StandardCharsets.UTF_8);
+            String data = readFile(file.getPath());
             return gson.fromJson(data, Ledger.class);
         } catch (Exception exception) {
             exception.printStackTrace();
