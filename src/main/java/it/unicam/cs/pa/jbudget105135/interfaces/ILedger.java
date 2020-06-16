@@ -21,6 +21,8 @@ public interface ILedger {
 
     boolean addAccount(AccountType accountType, String name, String description, double openingBalance);
 
+    boolean addAccount(IAccount account);
+
     boolean addTag(String name, String description);
 
     boolean addTags(List<ITag> tags);

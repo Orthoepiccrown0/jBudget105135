@@ -1,4 +1,4 @@
-package it.unicam.cs.pa.jbudget105135.classes;
+package it.unicam.cs.pa.jbudget105135.model;
 
 import it.unicam.cs.pa.jbudget105135.AccountType;
 import it.unicam.cs.pa.jbudget105135.interfaces.*;
@@ -76,12 +76,17 @@ public class Ledger implements ILedger {
     }
 
     @Override
+    public boolean addAccount(IAccount account) {
+        return accounts.add(account);
+    }
+
+    @Override
     public boolean addTag(String name, String description) {
         return tags.add(new Tag(name));
     }
 
     @Override
-    public boolean addTags(List<ITag> tags){
+    public boolean addTags(List<ITag> tags) {
         return this.tags.addAll(tags);
     }
 

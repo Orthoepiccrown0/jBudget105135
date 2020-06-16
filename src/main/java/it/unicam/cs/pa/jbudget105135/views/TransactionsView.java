@@ -1,8 +1,10 @@
-package it.unicam.cs.pa.jbudget105135.fxcontrollers;
+package it.unicam.cs.pa.jbudget105135.views;
 
-import it.unicam.cs.pa.jbudget105135.Controller;
-import it.unicam.cs.pa.jbudget105135.classes.Transaction;
+import it.unicam.cs.pa.jbudget105135.control.Controller;
+import it.unicam.cs.pa.jbudget105135.fxcontrollers.TransactionDialog;
+import it.unicam.cs.pa.jbudget105135.interfaces.IController;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITableView;
+import it.unicam.cs.pa.jbudget105135.model.Transaction;
 import it.unicam.cs.pa.jbudget105135.utils.ListUtils;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,7 +17,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -25,7 +27,7 @@ public class TransactionsView implements Initializable, ITableView {
     private List<Transaction> transactions;
     private Transaction selectedTransaction;
 
-    private Controller controller;
+    private IController controller;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -35,10 +37,10 @@ public class TransactionsView implements Initializable, ITableView {
 
     public void addTransaction() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../TransactionDialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../dialog/TransactionDialog.fxml"));
             Parent root = loader.load();
             TransactionDialog transactionDialog = loader.getController();
-            transactionDialog.setLedger(controller.getLedger());
+            transactionDialog.setController(controller);
             showDialog(root);
             controller.saveChanges();
         } catch (IOException e) {
@@ -62,8 +64,8 @@ public class TransactionsView implements Initializable, ITableView {
         column2.setCellValueFactory(new PropertyValueFactory<>("numberOfMovements"));
         TableColumn<Transaction, Double> column3 = new TableColumn<>("Total");
         column3.setCellValueFactory(new PropertyValueFactory<>("totalAmount"));
-        TableColumn<Transaction, Date> column4 = new TableColumn<>("Date");
-        column4.setCellValueFactory(new PropertyValueFactory<>("date"));
+        TableColumn<Transaction, LocalDate> column4 = new TableColumn<>("Date");
+        column4.setCellValueFactory(new PropertyValueFactory<>("localDate"));
         TableColumn<Transaction, String> column5 = new TableColumn<>("Tags");
         column5.setCellValueFactory(new PropertyValueFactory<>("tagsString"));
         table.getColumns().addAll(column1, column2, column3, column4, column5);
@@ -99,10 +101,10 @@ public class TransactionsView implements Initializable, ITableView {
 
     private void displayTransaction(Transaction transaction) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../TransactionDialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../dialog/TransactionDialog.fxml"));
             Parent root = loader.load();
             TransactionDialog transactionDialog = loader.getController();
-            transactionDialog.setLedger(controller.getLedger());
+            transactionDialog.setController(controller);
             transactionDialog.setTransaction(transaction);
             showDialog(root);
             controller.saveChanges();
@@ -127,7 +129,7 @@ public class TransactionsView implements Initializable, ITableView {
         table.getItems().addAll(transactions);
     }
 
-    public void setController(Controller controller) {
+    public void setController(IController controller) {
         this.controller = controller;
         refreshTable();
     }

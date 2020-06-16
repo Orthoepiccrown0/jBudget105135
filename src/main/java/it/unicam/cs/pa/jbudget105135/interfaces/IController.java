@@ -1,12 +1,67 @@
 package it.unicam.cs.pa.jbudget105135.interfaces;
 
-import java.util.Set;
-import java.util.function.Consumer;
+import com.google.gson.Gson;
+
+import java.io.File;
+import java.util.List;
 
 public interface IController {
 
-    void processCommand(String command);
+    /**
+     * Controller state
+     * @return true if it is on
+     */
+    boolean isOn();
 
-    Set<String> getCommandSet();
+    /**
+     * Close controller and set {@Code iOn=false}
+     */
+    void close();
 
+    /**
+     * Save all changes made
+     */
+    void saveChanges();
+
+    /**
+     * Add transaction
+     * @param transaction transaction to add
+     */
+    void addTransaction(ITransaction transaction);
+
+    /**
+     * Add account
+     * @param account account to add
+     */
+    void addAccount(IAccount account);
+
+    /**
+     * Add scheduled transaction
+     * @param transaction transaction to add
+     */
+    void addScheduledTransaction(IScheduledTransaction transaction);
+
+    /**
+     * Add tags
+     * @param tags list of tags to add
+     */
+    void addTags(List<ITag> tags);
+
+    /**
+     * Get ledger
+     * @return ledger
+     */
+    ILedger getLedger();
+
+    /**
+     * Get current file to save
+     * @return file
+     */
+    File getSaveFile();
+
+    /**
+     * Get current Gson
+     * @return Gson
+     */
+    Gson getGLedger();
 }

@@ -1,7 +1,7 @@
 package it.unicam.cs.pa.jbudget105135.utils;
 
-import it.unicam.cs.pa.jbudget105135.classes.*;
 import it.unicam.cs.pa.jbudget105135.interfaces.*;
+import it.unicam.cs.pa.jbudget105135.model.*;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -143,14 +143,20 @@ public class ListUtils {
         return movementsByTag;
     }
 
+    /**
+     * searching of scheduled transactions by date
+     * @param scheduledTransactions list of all scheduled transactions
+     * @param date selected date
+     * @return list of scheduled transactions or empty list
+     */
     public static List<ScheduledTransaction> searchScheduledTransactionByDate(List<ScheduledTransaction> scheduledTransactions,
-                                                                   LocalDate date) {
-        if(date==null)
+                                                                              LocalDate date) {
+        if (date == null)
             return null;
         List<ScheduledTransaction> movementsByDate = new ArrayList<>();
-        for (ScheduledTransaction transaction: scheduledTransactions){
+        for (ScheduledTransaction transaction : scheduledTransactions) {
             LocalDate transactionDate = transaction.getDate();
-            if(transactionDate.isEqual(date))
+            if (transactionDate.isEqual(date))
                 movementsByDate.add(transaction);
         }
         return movementsByDate;

@@ -1,4 +1,4 @@
-package it.unicam.cs.pa.jbudget105135.classes;
+package it.unicam.cs.pa.jbudget105135.model;
 
 import it.unicam.cs.pa.jbudget105135.MovementType;
 import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;

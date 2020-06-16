@@ -1,9 +1,11 @@
 package it.unicam.cs.pa.jbudget105135.fxcontrollers;
 
 import it.unicam.cs.pa.jbudget105135.AccountType;
-import it.unicam.cs.pa.jbudget105135.classes.Account;
-import it.unicam.cs.pa.jbudget105135.classes.Movement;
-import it.unicam.cs.pa.jbudget105135.interfaces.ILedger;
+import it.unicam.cs.pa.jbudget105135.control.Controller;
+import it.unicam.cs.pa.jbudget105135.interfaces.IAccount;
+import it.unicam.cs.pa.jbudget105135.interfaces.IController;
+import it.unicam.cs.pa.jbudget105135.model.Account;
+import it.unicam.cs.pa.jbudget105135.model.Movement;
 import it.unicam.cs.pa.jbudget105135.utils.ListUtils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -33,7 +35,8 @@ public class AccountDialog implements Initializable {
     public Label balanceLabel;
     public Label errorMessage;
 
-    private ILedger ledger;
+    private IController controller;
+
     private Account account;
     private ArrayList<Movement> movements = new ArrayList<>();
 
@@ -73,16 +76,13 @@ public class AccountDialog implements Initializable {
         });
     }
 
-    /**
-     * set current ledger to work
-     * @param ledger
-     */
-    public void setLedger(ILedger ledger) {
-        this.ledger = ledger;
+    public void setController(IController controller) {
+        this.controller = controller;
     }
 
     /**
      * display account
+     *
      * @param account
      */
     public void setAccount(Account account) {
@@ -118,7 +118,7 @@ public class AccountDialog implements Initializable {
             } else {
                 account.setName(nameField.getText().trim());
                 account.setDescription(descriptionField.getText().trim());
-                ListUtils.searchAccountAndReplaceIt(account, ledger);
+                ListUtils.searchAccountAndReplaceIt(account, controller.getLedger());
                 close();
             }
         }
@@ -134,11 +134,13 @@ public class AccountDialog implements Initializable {
         String name = nameField.getText().trim();
         String desc = descriptionField.getText().trim();
         double openingBalance = Double.parseDouble(openingBalanceField.getText());
-        ledger.addAccount(type, name, desc, openingBalance);
+        IAccount account = new Account(type, name, desc, openingBalance);
+        controller.addAccount(account);
     }
 
     /**
      * before submit check if it is a valid account
+     *
      * @return true if so, false otherwise
      */
     private boolean isValidAccount() {

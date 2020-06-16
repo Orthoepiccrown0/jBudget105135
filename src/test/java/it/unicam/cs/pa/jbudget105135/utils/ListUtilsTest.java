@@ -2,10 +2,10 @@ package it.unicam.cs.pa.jbudget105135.utils;
 
 import it.unicam.cs.pa.jbudget105135.AccountType;
 import it.unicam.cs.pa.jbudget105135.MovementType;
-import it.unicam.cs.pa.jbudget105135.classes.Ledger;
-import it.unicam.cs.pa.jbudget105135.classes.Movement;
-import it.unicam.cs.pa.jbudget105135.classes.Tag;
-import it.unicam.cs.pa.jbudget105135.classes.Transaction;
+import it.unicam.cs.pa.jbudget105135.model.Ledger;
+import it.unicam.cs.pa.jbudget105135.model.Movement;
+import it.unicam.cs.pa.jbudget105135.model.Tag;
+import it.unicam.cs.pa.jbudget105135.model.Transaction;
 import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITag;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITransaction;

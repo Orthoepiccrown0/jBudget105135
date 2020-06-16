@@ -1,4 +1,4 @@
-package it.unicam.cs.pa.jbudget105135.classes;
+package it.unicam.cs.pa.jbudget105135.model;
 
 import com.google.gson.Gson;
 import it.unicam.cs.pa.jbudget105135.AccountType;

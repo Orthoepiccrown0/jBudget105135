@@ -2,10 +2,10 @@ package it.unicam.cs.pa.jbudget105135.fxcontrollers;
 
 import it.unicam.cs.pa.jbudget105135.AccountType;
 import it.unicam.cs.pa.jbudget105135.MovementType;
-import it.unicam.cs.pa.jbudget105135.classes.Movement;
-import it.unicam.cs.pa.jbudget105135.classes.Tag;
 import it.unicam.cs.pa.jbudget105135.interfaces.IAccount;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITag;
+import it.unicam.cs.pa.jbudget105135.model.Movement;
+import it.unicam.cs.pa.jbudget105135.model.Tag;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -82,6 +82,7 @@ public class MovementDialog implements Initializable {
 
     /**
      * List of movements used in transaction
+     *
      * @param movements
      */
     public void setMovements(List<Movement> movements) {
@@ -90,6 +91,7 @@ public class MovementDialog implements Initializable {
 
     /**
      * displaying of movement
+     *
      * @param movement movement to show
      */
     public void setMovement(Movement movement) {
@@ -176,6 +178,7 @@ public class MovementDialog implements Initializable {
 
     /**
      * checks if you can afford this movement with selected account
+     *
      * @return true if you can, false otherwise
      */
     private boolean canAffordIt() {
@@ -215,6 +218,7 @@ public class MovementDialog implements Initializable {
 
     /**
      * accounts to display
+     *
      * @param accounts
      */
     public void setAccounts(ArrayList<IAccount> accounts) {

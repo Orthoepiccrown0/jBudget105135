@@ -1,11 +1,12 @@
-package it.unicam.cs.pa.jbudget105135.fxcontrollers;
+package it.unicam.cs.pa.jbudget105135.views;
 
-import it.unicam.cs.pa.jbudget105135.Controller;
 import it.unicam.cs.pa.jbudget105135.MovementType;
-import it.unicam.cs.pa.jbudget105135.classes.Movement;
+import it.unicam.cs.pa.jbudget105135.control.Controller;
 import it.unicam.cs.pa.jbudget105135.interfaces.IAccount;
+import it.unicam.cs.pa.jbudget105135.interfaces.IController;
 import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITableView;
+import it.unicam.cs.pa.jbudget105135.model.Movement;
 import it.unicam.cs.pa.jbudget105135.utils.ListUtils;
 import javafx.fxml.Initializable;
 import javafx.scene.control.SelectionMode;
@@ -22,7 +23,7 @@ import java.util.ResourceBundle;
 public class SearchByTagsView implements Initializable, ITableView {
     public TextField searchField;
     public TableView<Movement> table;
-    private Controller controller;
+    private IController controller;
 
 
     @Override
@@ -57,7 +58,7 @@ public class SearchByTagsView implements Initializable, ITableView {
         selectionModel.setSelectionMode(SelectionMode.SINGLE);
     }
 
-    public void setController(Controller controller) {
+    public void setController(IController controller) {
         this.controller = controller;
     }
 }

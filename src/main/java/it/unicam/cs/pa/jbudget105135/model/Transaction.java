@@ -1,9 +1,11 @@
-package it.unicam.cs.pa.jbudget105135.classes;
+package it.unicam.cs.pa.jbudget105135.model;
 
 import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITag;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITransaction;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 public class Transaction implements ITransaction {
@@ -14,10 +16,12 @@ public class Transaction implements ITransaction {
     private Date date;
     private double totalAmount = 0;
     private String name;
-    private int numberOfMovements = 0;
+    private final int numberOfMovements = 0;
+
     /**
      * restore transaction
-     *  @param ID
+     *
+     * @param ID
      * @param movements
      * @param tags
      * @param date
@@ -96,12 +100,12 @@ public class Transaction implements ITransaction {
         }
     }
 
-    public String getTagsString(){
+    public String getTagsString() {
         ArrayList<String> tagsStringList = new ArrayList<>();
-        for (ITag tag:tags) {
+        for (ITag tag : tags) {
             tagsStringList.add(tag.toString());
         }
-        return String.join(",",  tagsStringList);
+        return String.join(",", tagsStringList);
     }
 
     public int getNumberOfMovements() {
@@ -115,6 +119,10 @@ public class Transaction implements ITransaction {
     @Override
     public Date getDate() {
         return date;
+    }
+
+    public LocalDate getLocalDate() {
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     @Override

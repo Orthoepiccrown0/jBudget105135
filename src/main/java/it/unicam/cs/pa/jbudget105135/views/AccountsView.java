@@ -1,11 +1,12 @@
-package it.unicam.cs.pa.jbudget105135.fxcontrollers;
+package it.unicam.cs.pa.jbudget105135.views;
 
 import it.unicam.cs.pa.jbudget105135.AccountType;
-import it.unicam.cs.pa.jbudget105135.Controller;
-import it.unicam.cs.pa.jbudget105135.classes.Account;
+import it.unicam.cs.pa.jbudget105135.control.Controller;
+import it.unicam.cs.pa.jbudget105135.fxcontrollers.AccountDialog;
+import it.unicam.cs.pa.jbudget105135.interfaces.IController;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITableView;
+import it.unicam.cs.pa.jbudget105135.model.Account;
 import it.unicam.cs.pa.jbudget105135.utils.ListUtils;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -26,14 +27,14 @@ public class AccountsView implements Initializable, ITableView {
 
     private List<Account> accounts;
     private Account selectedAccount;
-    private Controller controller;
+    private IController controller;
 
     public void addAccount() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../AccountDialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../dialog/AccountDialog.fxml"));
             Parent root = loader.load();
             AccountDialog accountDialog = loader.getController();
-            accountDialog.setLedger(controller.getLedger());
+            accountDialog.setController(controller);
             showDialog(root);
             controller.saveChanges();
         } catch (IOException e) {
@@ -96,10 +97,10 @@ public class AccountsView implements Initializable, ITableView {
 
     private void displayAccount(Account account) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../AccountDialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../dialog/AccountDialog.fxml"));
             Parent root = loader.load();
             AccountDialog controllerFX = loader.getController();
-            controllerFX.setLedger(controller.getLedger());
+            controllerFX.setController(controller);
             controllerFX.setAccount(account);
             showDialog(root);
             controller.saveChanges();
@@ -124,7 +125,7 @@ public class AccountsView implements Initializable, ITableView {
         table.getItems().addAll(accounts);
     }
 
-    public void setController(Controller controller) {
+    public void setController(IController controller) {
         this.controller = controller;
         refreshTable();
     }

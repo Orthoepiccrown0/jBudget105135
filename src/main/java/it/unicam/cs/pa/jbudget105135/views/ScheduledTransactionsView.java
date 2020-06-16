@@ -1,9 +1,11 @@
-package it.unicam.cs.pa.jbudget105135.fxcontrollers;
+package it.unicam.cs.pa.jbudget105135.views;
 
-import it.unicam.cs.pa.jbudget105135.Controller;
-import it.unicam.cs.pa.jbudget105135.classes.ScheduledTransaction;
-import it.unicam.cs.pa.jbudget105135.classes.Transaction;
+import it.unicam.cs.pa.jbudget105135.control.Controller;
+import it.unicam.cs.pa.jbudget105135.fxcontrollers.TransactionDialog;
+import it.unicam.cs.pa.jbudget105135.interfaces.IController;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITableView;
+import it.unicam.cs.pa.jbudget105135.model.ScheduledTransaction;
+import it.unicam.cs.pa.jbudget105135.model.Transaction;
 import it.unicam.cs.pa.jbudget105135.utils.ListUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +19,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -24,7 +27,7 @@ public class ScheduledTransactionsView implements Initializable, ITableView {
     public TableView<ScheduledTransaction> table;
     public DatePicker dateField;
     public Button deleteButton;
-    private Controller controller;
+    private IController controller;
     private List<ScheduledTransaction> scheduledTransactions;
 
     public void search(ActionEvent actionEvent) {
@@ -49,7 +52,7 @@ public class ScheduledTransactionsView implements Initializable, ITableView {
         column1.setCellValueFactory(new PropertyValueFactory<>("description"));
         TableColumn<ScheduledTransaction, Boolean> column2 = new TableColumn<>("Completed");
         column2.setCellValueFactory(new PropertyValueFactory<>("completed"));
-        TableColumn<ScheduledTransaction, Boolean> column3 = new TableColumn<>("Date");
+        TableColumn<ScheduledTransaction, LocalDate> column3 = new TableColumn<>("Date");
         column3.setCellValueFactory(new PropertyValueFactory<>("date"));
         column1.setMinWidth(100);
         table.getColumns().addAll(column1, column2, column3);
@@ -74,10 +77,10 @@ public class ScheduledTransactionsView implements Initializable, ITableView {
 
     private void displayTransaction(Transaction transaction) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../TransactionDialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../dialog/TransactionDialog.fxml"));
             Parent root = loader.load();
             TransactionDialog transactionDialog = loader.getController();
-            transactionDialog.setLedger(controller.getLedger());
+            transactionDialog.setController(controller);
             transactionDialog.setTransaction(transaction);
             showDialog(root);
             controller.saveChanges();
@@ -108,18 +111,20 @@ public class ScheduledTransactionsView implements Initializable, ITableView {
         deleteButton.setDisable(true);
     }
 
-    public void setController(Controller controller) {
+    public void setController(IController controller) {
         this.controller = controller;
         this.scheduledTransactions = ListUtils.transformIScheduled(controller.getLedger().getScheduledTransaction());
+        this.table.getItems().clear();
+        this.table.getItems().addAll(scheduledTransactions);
     }
 
     public void addScheduledTransaction() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("../TransactionDialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("../dialog/TransactionDialog.fxml"));
             Parent root = loader.load();
             TransactionDialog controllerFX = loader.getController();
             controllerFX.setScheduled(true);
-            controllerFX.setLedger(controller.getLedger());
+            controllerFX.setController(controller);
             showDialog(root);
             controller.saveChanges();
         } catch (IOException e) {

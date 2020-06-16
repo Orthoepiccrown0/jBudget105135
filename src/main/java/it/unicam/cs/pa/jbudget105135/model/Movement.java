@@ -1,4 +1,4 @@
-package it.unicam.cs.pa.jbudget105135.classes;
+package it.unicam.cs.pa.jbudget105135.model;
 
 import it.unicam.cs.pa.jbudget105135.MovementType;
 import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
@@ -16,7 +16,7 @@ public class Movement implements IMovement {
     private final Date date;
 
     //restore constructor
-    public Movement(String ID, String description, double amount, MovementType type, List<ITag> tags,   Date date) {
+    public Movement(String ID, String description, double amount, MovementType type, List<ITag> tags, Date date) {
         this.ID = ID;
         this.description = description;
         this.amount = amount;
@@ -26,7 +26,7 @@ public class Movement implements IMovement {
     }
 
     //new movement
-    public Movement(String description, double amount, MovementType type, List<ITag> tags,   Date date) {
+    public Movement(String description, double amount, MovementType type, List<ITag> tags, Date date) {
         this.ID = UUID.randomUUID().toString();
         this.description = description;
         this.amount = amount;
@@ -74,12 +74,12 @@ public class Movement implements IMovement {
                 description.equals(movement.description);
     }
 
-    public String getTagsString(){
+    public String getTagsString() {
         ArrayList<String> tagsStringList = new ArrayList<>();
-        for (ITag tag:tags) {
+        for (ITag tag : tags) {
             tagsStringList.add(tag.toString());
         }
-        return String.join(",",  tagsStringList);
+        return String.join(",", tagsStringList);
     }
 
     @Override

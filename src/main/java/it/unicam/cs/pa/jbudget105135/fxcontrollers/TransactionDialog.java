@@ -1,12 +1,13 @@
 package it.unicam.cs.pa.jbudget105135.fxcontrollers;
 
-import it.unicam.cs.pa.jbudget105135.classes.Movement;
-import it.unicam.cs.pa.jbudget105135.classes.ScheduledTransaction;
-import it.unicam.cs.pa.jbudget105135.classes.Transaction;
+import it.unicam.cs.pa.jbudget105135.control.Controller;
 import it.unicam.cs.pa.jbudget105135.interfaces.IAccount;
-import it.unicam.cs.pa.jbudget105135.interfaces.ILedger;
+import it.unicam.cs.pa.jbudget105135.interfaces.IController;
 import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITag;
+import it.unicam.cs.pa.jbudget105135.model.Movement;
+import it.unicam.cs.pa.jbudget105135.model.ScheduledTransaction;
+import it.unicam.cs.pa.jbudget105135.model.Transaction;
 import it.unicam.cs.pa.jbudget105135.utils.ListUtils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -38,11 +39,11 @@ public class TransactionDialog implements Initializable {
     public Label error;
     public DatePicker datePicker;
 
-    private ILedger ledger;
+    private IController controller;
 
     public List<Movement> movements = new ArrayList<>();
     private List<IMovement> imovements = new ArrayList<>();
-    private List<ITag> tags = new ArrayList<>();
+    private final List<ITag> tags = new ArrayList<>();
     private boolean scheduled;
 
     //transaction to show
@@ -57,11 +58,11 @@ public class TransactionDialog implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../MovementDialog.fxml"));
             Parent root = loader.load();
-            MovementDialog controller = loader.getController();
-            controller.setMovements(movements);
-            controller.setAccounts((ArrayList<IAccount>) ledger.getAccounts());
-            controller.setDate(extractDateFromPicker());
-            controller.setTagsList(tags);
+            MovementDialog movementDialog = loader.getController();
+            movementDialog.setMovements(movements);
+            movementDialog.setAccounts((ArrayList<IAccount>) controller.getLedger().getAccounts());
+            movementDialog.setDate(extractDateFromPicker());
+            movementDialog.setTagsList(tags);
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Movement");
@@ -93,15 +94,16 @@ public class TransactionDialog implements Initializable {
                         extractDateFromPicker(), nameField.getText());
                 if (scheduled) {
                     String description = requestDescription();
-                    if(description.equals(""))
+
+                    if (description.equals(""))
                         displayQuitMessage();
-                    ScheduledTransaction scheduledTransaction = new ScheduledTransaction(description,transaction);
-                    ledger.addScheduledTransaction(scheduledTransaction);
+
+                    ScheduledTransaction scheduledTransaction = new ScheduledTransaction(description, transaction);
+                    controller.addScheduledTransaction(scheduledTransaction);
                 } else {
-                    ledger.addTransaction(transaction);
+                    controller.addTransaction(transaction);
                 }
-                ledger.addTags(tags);
-                close();
+                controller.addTags(tags);
             } else {
                 transaction.setDate(extractDateFromPicker());
                 transaction.setName(nameField.getText());
@@ -109,9 +111,9 @@ public class TransactionDialog implements Initializable {
                 imovements.clear();
                 imovements.addAll(movements);
                 transaction.setMovements(imovements);
-                ListUtils.searchTransactionAndReplaceIt(transaction, ledger);
-                close();
+                ListUtils.searchTransactionAndReplaceIt(transaction, controller.getLedger());
             }
+            close();
         }
     }
 
@@ -120,7 +122,6 @@ public class TransactionDialog implements Initializable {
         alert.setTitle("Error");
         alert.setHeaderText("Maybe we are misunderstood");
         alert.setContentText("Looks like u don't want to create scheduled transaction, bye! >:(");
-
         alert.showAndWait();
 
     }
@@ -173,8 +174,8 @@ public class TransactionDialog implements Initializable {
         error.setText(msg);
     }
 
-    public void setLedger(ILedger ledger) {
-        this.ledger = ledger;
+    public void setController(IController controller) {
+        this.controller = controller;
         setDateRange();
     }
 

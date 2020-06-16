@@ -1,7 +1,11 @@
 package it.unicam.cs.pa.jbudget105135.interfaces;
 
-import it.unicam.cs.pa.jbudget105135.Controller;
+import it.unicam.cs.pa.jbudget105135.control.Controller;
 
 public interface IControllerCallback {
-    void setController(Controller controller);
+    /**
+     * Used to set controller
+     * @param controller controller
+     */
+    void setController(IController controller);
 }
