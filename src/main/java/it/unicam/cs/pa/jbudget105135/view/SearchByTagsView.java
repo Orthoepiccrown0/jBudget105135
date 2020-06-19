@@ -1,13 +1,12 @@
-package it.unicam.cs.pa.jbudget105135.views;
+package it.unicam.cs.pa.jbudget105135.view;
 
 import it.unicam.cs.pa.jbudget105135.MovementType;
-import it.unicam.cs.pa.jbudget105135.control.Controller;
+import it.unicam.cs.pa.jbudget105135.control.ModelController;
 import it.unicam.cs.pa.jbudget105135.interfaces.IAccount;
 import it.unicam.cs.pa.jbudget105135.interfaces.IController;
 import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITableView;
 import it.unicam.cs.pa.jbudget105135.model.Movement;
-import it.unicam.cs.pa.jbudget105135.utils.ListUtils;
 import javafx.fxml.Initializable;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
@@ -37,9 +36,9 @@ public class SearchByTagsView implements Initializable, ITableView {
             for (IAccount account : controller.getLedger().getAccounts())
                 tmpMovements.addAll(account.getMovements());
 
-            List<IMovement> movementsContainingTags = ListUtils.searchMovementsByTag(tmpMovements, searchField.getText().trim());
+            List<IMovement> movementsContainingTags = ModelController.searchMovementsByTag(tmpMovements, searchField.getText().trim());
             table.getItems().clear();
-            table.getItems().addAll(ListUtils.transformIMovements(movementsContainingTags));
+            table.getItems().addAll(ModelController.transformIMovements(movementsContainingTags));
         }
     }
 

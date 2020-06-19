@@ -1,6 +1,6 @@
-package it.unicam.cs.pa.jbudget105135.fxcontrollers;
+package it.unicam.cs.pa.jbudget105135.view;
 
-import it.unicam.cs.pa.jbudget105135.control.Controller;
+import it.unicam.cs.pa.jbudget105135.control.ModelController;
 import it.unicam.cs.pa.jbudget105135.interfaces.IAccount;
 import it.unicam.cs.pa.jbudget105135.interfaces.IController;
 import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
@@ -8,7 +8,7 @@ import it.unicam.cs.pa.jbudget105135.interfaces.ITag;
 import it.unicam.cs.pa.jbudget105135.model.Movement;
 import it.unicam.cs.pa.jbudget105135.model.ScheduledTransaction;
 import it.unicam.cs.pa.jbudget105135.model.Transaction;
-import it.unicam.cs.pa.jbudget105135.utils.ListUtils;
+import it.unicam.cs.pa.jbudget105135.view.MovementDialog;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -42,15 +42,17 @@ public class TransactionDialog implements Initializable {
     private IController controller;
 
     public List<Movement> movements = new ArrayList<>();
-    private List<IMovement> imovements = new ArrayList<>();
+    private List<IMovement> iMovements = new ArrayList<>();
     private final List<ITag> tags = new ArrayList<>();
     private boolean scheduled;
 
     //transaction to show
     private Transaction transaction;
 
-
-    public void addMovement(ActionEvent actionEvent) {
+    /**
+     * Add movement button event. Shows new dialog to insert a new movement.
+     */
+    public void addMovement() {
         if (datePicker.getValue() == null) {
             setErrorMessage("Error: Please pick the transaction date");
             return;
@@ -58,11 +60,13 @@ public class TransactionDialog implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../MovementDialog.fxml"));
             Parent root = loader.load();
+
             MovementDialog movementDialog = loader.getController();
             movementDialog.setMovements(movements);
             movementDialog.setAccounts((ArrayList<IAccount>) controller.getLedger().getAccounts());
             movementDialog.setDate(extractDateFromPicker());
             movementDialog.setTagsList(tags);
+
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Movement");
@@ -82,15 +86,18 @@ public class TransactionDialog implements Initializable {
     }
 
     public void deleteMovement(ActionEvent actionEvent) {
-
+        //future implementation
     }
 
-    public void addTransaction(ActionEvent actionEvent) {
+    /**
+     * Add new transaction or change an existing and close window.
+     */
+    public void addTransaction() {
         if (isValidTransaction()) {
             if (transaction == null) {
-                imovements.clear();
-                imovements.addAll(movements);
-                Transaction transaction = new Transaction(UUID.randomUUID().toString(), imovements, tags,
+                iMovements.clear();
+                iMovements.addAll(movements);
+                Transaction transaction = new Transaction(UUID.randomUUID().toString(), iMovements, tags,
                         extractDateFromPicker(), nameField.getText());
                 if (scheduled) {
                     String description = requestDescription();
@@ -108,10 +115,10 @@ public class TransactionDialog implements Initializable {
                 transaction.setDate(extractDateFromPicker());
                 transaction.setName(nameField.getText());
                 transaction.setTags(tags);
-                imovements.clear();
-                imovements.addAll(movements);
-                transaction.setMovements(imovements);
-                ListUtils.searchTransactionAndReplaceIt(transaction, controller.getLedger());
+                iMovements.clear();
+                iMovements.addAll(movements);
+                transaction.setMovements(iMovements);
+                ModelController.searchTransactionAndReplaceIt(transaction, controller.getLedger());
             }
             close();
         }
@@ -186,8 +193,8 @@ public class TransactionDialog implements Initializable {
     }
 
     private void unpack() {
-        movements = ListUtils.transformIMovements(transaction.getMovements());
-        imovements = transaction.getMovements();
+        movements = ModelController.transformIMovements(transaction.getMovements());
+        iMovements = transaction.getMovements();
         nameField.setText(transaction.getName());
         tagsField.setText(generateStringOfTags(transaction.getTags()));
         datePicker.setValue(transaction.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
@@ -197,6 +204,12 @@ public class TransactionDialog implements Initializable {
         datePicker.setDisable(true);
     }
 
+    /**
+     * Generates string of tags used in all movements
+     *
+     * @param target list of tags
+     * @return string of tags like (tag1, tag2, ...)
+     */
     private String generateStringOfTags(List<ITag> target) {
         ArrayList<String> tags = new ArrayList<>();
         for (ITag tag : target) {
@@ -214,6 +227,9 @@ public class TransactionDialog implements Initializable {
         setupMovementsTable();
     }
 
+    /**
+     * Setup of movements table
+     */
     private void setupMovementsTable() {
         TableColumn<Movement, String> column1 = new TableColumn<>("Description");
         column1.setCellValueFactory(new PropertyValueFactory<>("description"));

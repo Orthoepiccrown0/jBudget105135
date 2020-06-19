@@ -1,11 +1,9 @@
-package it.unicam.cs.pa.jbudget105135.views;
+package it.unicam.cs.pa.jbudget105135.view;
 
-import it.unicam.cs.pa.jbudget105135.control.Controller;
-import it.unicam.cs.pa.jbudget105135.fxcontrollers.TransactionDialog;
+import it.unicam.cs.pa.jbudget105135.control.ModelController;
 import it.unicam.cs.pa.jbudget105135.interfaces.IController;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITableView;
 import it.unicam.cs.pa.jbudget105135.model.Transaction;
-import it.unicam.cs.pa.jbudget105135.utils.ListUtils;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -50,7 +48,7 @@ public class TransactionsView implements Initializable, ITableView {
 
     public void deleteTransaction() {
         if (selectedTransaction != null) {
-            ListUtils.searchTransactionDeleteIt(selectedTransaction, controller.getLedger());
+            ModelController.searchTransactionDeleteIt(selectedTransaction, controller.getLedger());
             refreshTable();
             controller.saveChanges();
         }
@@ -124,7 +122,7 @@ public class TransactionsView implements Initializable, ITableView {
     }
 
     private void refreshTable() {
-        transactions = ListUtils.transformITransactions(controller.getLedger().getTransactions());
+        transactions = ModelController.transformITransactions(controller.getLedger().getTransactions());
         table.getItems().clear();
         table.getItems().addAll(transactions);
     }

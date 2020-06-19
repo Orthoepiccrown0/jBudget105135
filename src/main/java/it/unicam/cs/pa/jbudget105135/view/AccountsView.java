@@ -1,12 +1,10 @@
-package it.unicam.cs.pa.jbudget105135.views;
+package it.unicam.cs.pa.jbudget105135.view;
 
 import it.unicam.cs.pa.jbudget105135.AccountType;
-import it.unicam.cs.pa.jbudget105135.control.Controller;
-import it.unicam.cs.pa.jbudget105135.fxcontrollers.AccountDialog;
+import it.unicam.cs.pa.jbudget105135.control.ModelController;
 import it.unicam.cs.pa.jbudget105135.interfaces.IController;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITableView;
 import it.unicam.cs.pa.jbudget105135.model.Account;
-import it.unicam.cs.pa.jbudget105135.utils.ListUtils;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -29,6 +27,9 @@ public class AccountsView implements Initializable, ITableView {
     private Account selectedAccount;
     private IController controller;
 
+    /**
+     * Add action button
+     */
     public void addAccount() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("../dialog/AccountDialog.fxml"));
@@ -43,7 +44,7 @@ public class AccountsView implements Initializable, ITableView {
     }
 
     public void deleteAccount() {
-        //todo: boh
+        //future implementation
     }
 
     @Override
@@ -120,7 +121,7 @@ public class AccountsView implements Initializable, ITableView {
     }
 
     private void refreshTable() {
-        accounts = ListUtils.transformIAccount(controller.getLedger().getAccounts());
+        accounts = ModelController.transformIAccount(controller.getLedger().getAccounts());
         table.getItems().clear();
         table.getItems().addAll(accounts);
     }

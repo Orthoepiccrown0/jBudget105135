@@ -15,6 +15,12 @@ public class ScheduledTransaction implements IScheduledTransaction {
     private boolean completed;
 
 
+    /**
+     * Create new scheduled transaction
+     *
+     * @param description  description of transaction
+     * @param transactions transaction
+     */
     public ScheduledTransaction(String description, ITransaction transactions) {
         this.ID = UUID.randomUUID().toString();
         this.description = description;

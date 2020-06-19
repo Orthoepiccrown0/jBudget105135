@@ -22,14 +22,6 @@ public class Account implements IAccount {
 
     /**
      * restore account
-     *
-     * @param ID
-     * @param type
-     * @param name
-     * @param description
-     * @param openingBalance
-     * @param movements
-     * @param balance
      */
     public Account(String ID, AccountType type, String name, String description, double openingBalance, List<IMovement> movements, double balance) {
         this.ID = ID;
@@ -43,11 +35,6 @@ public class Account implements IAccount {
 
     /**
      * create new account
-     *
-     * @param type
-     * @param name
-     * @param description
-     * @param openingBalance
      */
     public Account(AccountType type, String name, String description, double openingBalance) {
         this.type = type;

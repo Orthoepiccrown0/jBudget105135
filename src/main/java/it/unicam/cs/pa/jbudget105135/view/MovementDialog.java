@@ -1,4 +1,4 @@
-package it.unicam.cs.pa.jbudget105135.fxcontrollers;
+package it.unicam.cs.pa.jbudget105135.view;
 
 import it.unicam.cs.pa.jbudget105135.AccountType;
 import it.unicam.cs.pa.jbudget105135.MovementType;
@@ -44,7 +44,6 @@ public class MovementDialog implements Initializable {
 
     //used to display details of already existing movement
     private Movement movement;
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -159,6 +158,11 @@ public class MovementDialog implements Initializable {
         return true;
     }
 
+    /**
+     * Check if amount inserted is correct
+     *
+     * @return true if it is
+     */
     private boolean checkAmount() {
         try {
             if (amount.getText().length() != 0) {

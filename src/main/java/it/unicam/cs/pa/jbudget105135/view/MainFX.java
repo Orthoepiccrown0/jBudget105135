@@ -1,16 +1,15 @@
-package it.unicam.cs.pa.jbudget105135.fxcontrollers;
+package it.unicam.cs.pa.jbudget105135.view;
 
 
 import it.unicam.cs.pa.jbudget105135.control.Controller;
 import it.unicam.cs.pa.jbudget105135.interfaces.IController;
-import it.unicam.cs.pa.jbudget105135.interfaces.IControllerCallback;
 import it.unicam.cs.pa.jbudget105135.interfaces.ILedger;
-import it.unicam.cs.pa.jbudget105135.model.Ledger;
 import it.unicam.cs.pa.jbudget105135.model.FileManager;
-import it.unicam.cs.pa.jbudget105135.views.AccountsView;
-import it.unicam.cs.pa.jbudget105135.views.ScheduledTransactionsView;
-import it.unicam.cs.pa.jbudget105135.views.SearchByTagsView;
-import it.unicam.cs.pa.jbudget105135.views.TransactionsView;
+import it.unicam.cs.pa.jbudget105135.model.Ledger;
+import it.unicam.cs.pa.jbudget105135.view.AccountsView;
+import it.unicam.cs.pa.jbudget105135.view.ScheduledTransactionsView;
+import it.unicam.cs.pa.jbudget105135.view.SearchByTagsView;
+import it.unicam.cs.pa.jbudget105135.view.TransactionsView;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -29,8 +28,7 @@ import java.util.ResourceBundle;
  * The class  {@code Main} contains methods that are used to display data
  * and interact with it
  */
-public class Main implements Initializable, IControllerCallback {
-    public Pane controlsPane;
+public class MainFX implements Initializable {
     public Pane transactionsBPane;
     public Pane accountsBPane;
     public Pane tagsBPane;
@@ -45,30 +43,9 @@ public class Main implements Initializable, IControllerCallback {
 
     private IController controller;
 
-    private enum PageType {
-        TRANSACTIONS,
-        TAGS,
-        SCHEDULED_TRANSACTION,
-        MOVEMENTS,  //for future implementation
-        ACCOUNTS
-    }
-
-    private PageType currentPage;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         lockMenu();
-    }
-
-    @Override
-    public void setController(IController controller) {
-        this.controller = controller;
-        unlockMenu();
-        try {
-            switchToTransactions();
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
-        }
     }
 
     /**
@@ -119,6 +96,11 @@ public class Main implements Initializable, IControllerCallback {
         setAnchors(root);
     }
 
+    /**
+     * Anchor
+     *
+     * @param node
+     */
     private void setAnchors(Node node) {
         AnchorPane.setBottomAnchor(node, 0.0);
         AnchorPane.setTopAnchor(node, 0.0);
@@ -138,7 +120,7 @@ public class Main implements Initializable, IControllerCallback {
         File saveFile = fileChooser.showSaveDialog(transactionsBPane.getScene().getWindow());
         if (saveFile != null) {
             FileManager fileManager = new FileManager();
-            fileManager.save("",saveFile);
+            fileManager.save("", saveFile);
             Ledger ledger = new Ledger();
             noFileSelectedPane.setVisible(false);
             controller = new Controller(ledger, saveFile);
@@ -171,6 +153,7 @@ public class Main implements Initializable, IControllerCallback {
                     controller = new Controller(getValue(), saveFile);
                     noFileSelectedPane.setVisible(false);
                     unlockMenu();
+                    controller.executeScheduledTransactions(controller.getLedger());
                     try {
                         switchToTransactions();
                     } catch (IOException ioException) {

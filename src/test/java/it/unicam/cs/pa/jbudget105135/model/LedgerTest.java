@@ -24,7 +24,7 @@ public class LedgerTest extends TestCase {
         transactionTags.add(new Tag("ttag2"));
         transactionTags.add(new Tag("ttag2"));
         ITransaction transaction = new Transaction(UUID.randomUUID().toString(),new ArrayList<>(), transactionTags, new Date(),"name");
-        ledger.addAccount(AccountType.ASSETS, "name", "desc", 1500);
+        ledger.addAccount(new Account(AccountType.ASSETS, "name", "desc", 1500));
         IMovement movement = new Movement("description", 1000, MovementType.CREDIT, movementTags,  transaction.getDate());
         transaction.addMovement(movement);
         ledger.addTransaction(transaction);
@@ -40,7 +40,7 @@ public class LedgerTest extends TestCase {
         transactionTags.add(new Tag("ttag2"));
         transactionTags.add(new Tag("ttag2"));
         ITransaction transaction = new Transaction(UUID.randomUUID().toString(),new ArrayList<>(), transactionTags, new Date(),"name");
-        ledger.addAccount(AccountType.ASSETS, "name", "desc", 1500);
+        ledger.addAccount(new Account(AccountType.ASSETS, "name", "desc", 1500));
         IMovement movement = new Movement("description", 1000, MovementType.CREDIT, movementTags, transaction.getDate());
         transaction.addMovement(movement);
         ledger.addTransaction(transaction);
@@ -56,7 +56,7 @@ public class LedgerTest extends TestCase {
         transactionTags.add(new Tag("ttag2"));
         transactionTags.add(new Tag("ttag2"));
         ITransaction transaction = new Transaction(UUID.randomUUID().toString(),new ArrayList<>(), transactionTags, new Date(),"name");
-        ledger.addAccount(AccountType.ASSETS, "name", "desc", 1500);
+        ledger.addAccount(new Account(AccountType.ASSETS, "name", "desc", 1500));
         IMovement movement = new Movement("description", 1000, MovementType.CREDIT, movementTags, transaction.getDate());
         transaction.addMovement(movement);
         ledger.addTransaction(transaction);

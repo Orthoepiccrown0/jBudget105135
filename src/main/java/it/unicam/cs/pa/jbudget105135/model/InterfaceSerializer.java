@@ -1,4 +1,4 @@
-package it.unicam.cs.pa.jbudget105135.utils;
+package it.unicam.cs.pa.jbudget105135.model;
 
 import com.google.gson.*;
 

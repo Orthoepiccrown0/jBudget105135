@@ -10,13 +10,13 @@ javafx {
 }
 
 group 'it.unicam.cs.pa.jbudget105135'
-version '0.2'
+version '1.0'
 repositories {
     mavenCentral()
 }
 
 application {
-    mainClassName = 'it.unicam.cs.pa.jbudget105135.AppFX'
+    mainClassName = 'it.unicam.cs.pa.jbudget105135.App'
 }
 
 dependencies {

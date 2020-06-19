@@ -1,15 +1,13 @@
-package it.unicam.cs.pa.jbudget105135.utils;
+package it.unicam.cs.pa.jbudget105135.control;
 
 import it.unicam.cs.pa.jbudget105135.interfaces.*;
 import it.unicam.cs.pa.jbudget105135.model.*;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-public class ListUtils {
+public class ModelController {
 
     /**
      * transform list of Interfaces into implementing classes
@@ -93,7 +91,7 @@ public class ListUtils {
             Transaction t = (Transaction) ledger.getTransactions().get(i);
             if (transaction.getID().equals(t.getID())) {
                 removeMovementsFromAccount(t.getMovements(), ledger);
-                ledger.getTransactions().remove(t);
+                ledger.removeTransaction(t);
             }
         }
     }
@@ -145,8 +143,9 @@ public class ListUtils {
 
     /**
      * searching of scheduled transactions by date
+     *
      * @param scheduledTransactions list of all scheduled transactions
-     * @param date selected date
+     * @param date                  selected date
      * @return list of scheduled transactions or empty list
      */
     public static List<ScheduledTransaction> searchScheduledTransactionByDate(List<ScheduledTransaction> scheduledTransactions,
@@ -160,27 +159,5 @@ public class ListUtils {
                 movementsByDate.add(transaction);
         }
         return movementsByDate;
-    }
-
-    /**
-     * executing of scheduled transaction and moving it to ledger transactions
-     *
-     * @param ledger current ledger
-     * @return true if any scheduled transaction were executed, false otherwise
-     */
-    public static boolean executeScheduledTransactions(ILedger ledger) {
-        LocalDate now = LocalDate.now();
-        for (IScheduledTransaction sTransaction : ledger.getScheduledTransaction()) {
-            Date date = sTransaction.getTransaction().getDate();
-            LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            if (now.isAfter(localDate) || now.isEqual(localDate)) {
-                if (!ledger.getTransactions().contains(sTransaction.getTransaction())) {
-                    ledger.addTransaction(sTransaction.getTransaction());
-                    sTransaction.setCompleted(true);
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 }

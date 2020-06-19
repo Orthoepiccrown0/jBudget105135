@@ -74,6 +74,11 @@ public class Movement implements IMovement {
                 description.equals(movement.description);
     }
 
+    /**
+     * Generate String of tags
+     *
+     * @return String of tags like (tag1, tag2, ...)
+     */
     public String getTagsString() {
         ArrayList<String> tagsStringList = new ArrayList<>();
         for (ITag tag : tags) {

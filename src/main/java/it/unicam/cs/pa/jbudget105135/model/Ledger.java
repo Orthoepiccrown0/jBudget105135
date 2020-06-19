@@ -1,6 +1,5 @@
 package it.unicam.cs.pa.jbudget105135.model;
 
-import it.unicam.cs.pa.jbudget105135.AccountType;
 import it.unicam.cs.pa.jbudget105135.interfaces.*;
 
 import java.util.*;
@@ -12,18 +11,6 @@ public class Ledger implements ILedger {
     private final List<IScheduledTransaction> scheduledTransactions;
     private final Set<ITag> tags;
     private final String ID;
-
-
-    /**
-     * restore ledger
-     *
-     * @param accounts
-     * @param transactions
-     * @param scheduledTransactions
-     * @param tags
-     * @param ID
-     */
-
 
     /**
      * create new ledger
@@ -68,11 +55,6 @@ public class Ledger implements ILedger {
     @Override
     public Set<ITag> getTags() {
         return tags;
-    }
-
-    @Override
-    public boolean addAccount(AccountType accountType, String name, String description, double openingBalance) {
-        return accounts.add(new Account(accountType, name, description, openingBalance));
     }
 
     @Override

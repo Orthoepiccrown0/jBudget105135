@@ -1,12 +1,11 @@
-package it.unicam.cs.pa.jbudget105135.fxcontrollers;
+package it.unicam.cs.pa.jbudget105135.view;
 
 import it.unicam.cs.pa.jbudget105135.AccountType;
-import it.unicam.cs.pa.jbudget105135.control.Controller;
+import it.unicam.cs.pa.jbudget105135.control.ModelController;
 import it.unicam.cs.pa.jbudget105135.interfaces.IAccount;
 import it.unicam.cs.pa.jbudget105135.interfaces.IController;
 import it.unicam.cs.pa.jbudget105135.model.Account;
 import it.unicam.cs.pa.jbudget105135.model.Movement;
-import it.unicam.cs.pa.jbudget105135.utils.ListUtils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -83,7 +82,7 @@ public class AccountDialog implements Initializable {
     /**
      * display account
      *
-     * @param account
+     * @param account account to display
      */
     public void setAccount(Account account) {
         this.account = account;
@@ -93,7 +92,7 @@ public class AccountDialog implements Initializable {
     private void unpack() {
         openingBalanceField.setDisable(true);
         typeField.setDisable(true);
-        movements = (ArrayList<Movement>) ListUtils.transformIMovements(account.getMovements());
+        movements = (ArrayList<Movement>) ModelController.transformIMovements(account.getMovements());
         setTableData();
         restoreFields();
     }
@@ -103,6 +102,7 @@ public class AccountDialog implements Initializable {
         descriptionField.setText(account.getDescription());
         openingBalanceField.setText(String.valueOf(account.getOpeningBalance()));
         typeField.getSelectionModel().select(account.getType());
+        balanceLabel.setText("Balance: " + account.getBalance());
     }
 
     private void setTableData() {
@@ -114,13 +114,12 @@ public class AccountDialog implements Initializable {
         if (isValidAccount()) {
             if (account == null) {
                 createNewAccount();
-                close();
             } else {
                 account.setName(nameField.getText().trim());
                 account.setDescription(descriptionField.getText().trim());
-                ListUtils.searchAccountAndReplaceIt(account, controller.getLedger());
-                close();
+                ModelController.searchAccountAndReplaceIt(account, controller.getLedger());
             }
+            close();
         }
     }
 

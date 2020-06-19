@@ -1,12 +1,10 @@
-package it.unicam.cs.pa.jbudget105135.views;
+package it.unicam.cs.pa.jbudget105135.view;
 
-import it.unicam.cs.pa.jbudget105135.control.Controller;
-import it.unicam.cs.pa.jbudget105135.fxcontrollers.TransactionDialog;
+import it.unicam.cs.pa.jbudget105135.control.ModelController;
 import it.unicam.cs.pa.jbudget105135.interfaces.IController;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITableView;
 import it.unicam.cs.pa.jbudget105135.model.ScheduledTransaction;
 import it.unicam.cs.pa.jbudget105135.model.Transaction;
-import it.unicam.cs.pa.jbudget105135.utils.ListUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -30,10 +28,15 @@ public class ScheduledTransactionsView implements Initializable, ITableView {
     private IController controller;
     private List<ScheduledTransaction> scheduledTransactions;
 
+    /**
+     * Search button action
+     */
     public void search(ActionEvent actionEvent) {
+        if (dateField.getValue() == null)
+            return;
 
         List<ScheduledTransaction> transactions =
-                ListUtils.searchScheduledTransactionByDate(scheduledTransactions, dateField.getValue());
+                ModelController.searchScheduledTransactionByDate(scheduledTransactions, dateField.getValue());
         if (transactions == null)
             return;
         table.getItems().clear();
@@ -100,7 +103,7 @@ public class ScheduledTransactionsView implements Initializable, ITableView {
     }
 
     private void refreshTable() {
-        scheduledTransactions = ListUtils.transformIScheduled(controller.getLedger().getScheduledTransaction());
+        scheduledTransactions = ModelController.transformIScheduled(controller.getLedger().getScheduledTransaction());
         table.getItems().clear();
         table.getItems().addAll(scheduledTransactions);
     }
@@ -113,7 +116,7 @@ public class ScheduledTransactionsView implements Initializable, ITableView {
 
     public void setController(IController controller) {
         this.controller = controller;
-        this.scheduledTransactions = ListUtils.transformIScheduled(controller.getLedger().getScheduledTransaction());
+        this.scheduledTransactions = ModelController.transformIScheduled(controller.getLedger().getScheduledTransaction());
         this.table.getItems().clear();
         this.table.getItems().addAll(scheduledTransactions);
     }

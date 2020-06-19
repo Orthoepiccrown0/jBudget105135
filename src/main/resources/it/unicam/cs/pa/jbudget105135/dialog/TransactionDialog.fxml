@@ -5,7 +5,7 @@
 <?import javafx.scene.text.Font?>
 <AnchorPane prefHeight="400.0" prefWidth="700.0" stylesheets="@../../../../../../css/style.css"
             xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="it.unicam.cs.pa.jbudget105135.fxcontrollers.TransactionDialog">
+            fx:controller="it.unicam.cs.pa.jbudget105135.view.TransactionDialog">
     <children>
         <AnchorPane layoutX="200.0" layoutY="51.0" prefHeight="280.0" prefWidth="670.0" styleClass="roundedPane"
                     AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="30.0">

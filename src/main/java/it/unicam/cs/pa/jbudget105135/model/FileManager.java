@@ -3,7 +3,6 @@ package it.unicam.cs.pa.jbudget105135.model;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import it.unicam.cs.pa.jbudget105135.interfaces.*;
-import it.unicam.cs.pa.jbudget105135.utils.InterfaceSerializer;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class FileManager implements IStoreManager{
+public class FileManager implements IStoreManager {
 
     private final Gson gson;
 
@@ -25,17 +24,32 @@ public class FileManager implements IStoreManager{
                 .create();
     }
 
+    /**
+     * Reads all bytes from file and transform it into String
+     *
+     * @param path file path
+     * @return String
+     * @throws IOException if An IOExceptions was thrown
+     */
     private String readFile(String path) throws IOException {
         byte[] encoded = Files.readAllBytes(Paths.get(path));
         return new String(encoded, StandardCharsets.UTF_8);
     }
 
+    /**
+     * Writes all bytes of data into file
+     *
+     * @param path file path
+     * @param data data to write
+     * @throws IOException if An IOExceptions was thrown
+     */
     private void writeFile(String path, String data) throws IOException {
         Files.write(Paths.get(path), data.getBytes());
     }
 
     /**
      * save all data into file rewriting it
+     *
      * @param data data to save
      * @param file file to use
      */
@@ -50,6 +64,7 @@ public class FileManager implements IStoreManager{
 
     /**
      * load data from file
+     *
      * @param file file to load from
      * @return ledger
      */
