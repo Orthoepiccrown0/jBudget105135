@@ -49,10 +49,9 @@ public interface IController {
      * Checks if there is any scheduled transaction to be completed in day of executing of app
      * and moving it to ledger transactions
      *
-     * @param ledger ledger to check
      * @return true if there was at least one scheduled transaction
      */
-    boolean executeScheduledTransactions(ILedger ledger);
+    boolean executeScheduledTransactions();
 
     /**
      * Add tags

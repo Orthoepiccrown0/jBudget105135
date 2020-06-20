@@ -1,14 +1,12 @@
 package it.unicam.cs.pa.jbudget105135.view;
 
-import it.unicam.cs.pa.jbudget105135.control.ModelController;
+import it.unicam.cs.pa.jbudget105135.control.Controller;
 import it.unicam.cs.pa.jbudget105135.interfaces.IAccount;
-import it.unicam.cs.pa.jbudget105135.interfaces.IController;
 import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITag;
 import it.unicam.cs.pa.jbudget105135.model.Movement;
 import it.unicam.cs.pa.jbudget105135.model.ScheduledTransaction;
 import it.unicam.cs.pa.jbudget105135.model.Transaction;
-import it.unicam.cs.pa.jbudget105135.view.MovementDialog;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -39,7 +37,7 @@ public class TransactionDialog implements Initializable {
     public Label error;
     public DatePicker datePicker;
 
-    private IController controller;
+    private Controller controller;
 
     public List<Movement> movements = new ArrayList<>();
     private List<IMovement> iMovements = new ArrayList<>();
@@ -118,7 +116,7 @@ public class TransactionDialog implements Initializable {
                 iMovements.clear();
                 iMovements.addAll(movements);
                 transaction.setMovements(iMovements);
-                ModelController.searchTransactionAndReplaceIt(transaction, controller.getLedger());
+                controller.searchTransactionAndReplaceIt(transaction);
             }
             close();
         }
@@ -181,7 +179,7 @@ public class TransactionDialog implements Initializable {
         error.setText(msg);
     }
 
-    public void setController(IController controller) {
+    public void setController(Controller controller) {
         this.controller = controller;
         setDateRange();
     }
@@ -193,7 +191,7 @@ public class TransactionDialog implements Initializable {
     }
 
     private void unpack() {
-        movements = ModelController.transformIMovements(transaction.getMovements());
+        movements = controller.transformIMovements(transaction.getMovements());
         iMovements = transaction.getMovements();
         nameField.setText(transaction.getName());
         tagsField.setText(generateStringOfTags(transaction.getTags()));

@@ -2,14 +2,9 @@ package it.unicam.cs.pa.jbudget105135.view;
 
 
 import it.unicam.cs.pa.jbudget105135.control.Controller;
-import it.unicam.cs.pa.jbudget105135.interfaces.IController;
 import it.unicam.cs.pa.jbudget105135.interfaces.ILedger;
 import it.unicam.cs.pa.jbudget105135.model.FileManager;
 import it.unicam.cs.pa.jbudget105135.model.Ledger;
-import it.unicam.cs.pa.jbudget105135.view.AccountsView;
-import it.unicam.cs.pa.jbudget105135.view.ScheduledTransactionsView;
-import it.unicam.cs.pa.jbudget105135.view.SearchByTagsView;
-import it.unicam.cs.pa.jbudget105135.view.TransactionsView;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -41,7 +36,7 @@ public class MainFX implements Initializable {
 
     public AnchorPane rootPanel;
 
-    private IController controller;
+    private Controller controller;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -153,7 +148,7 @@ public class MainFX implements Initializable {
                     controller = new Controller(getValue(), saveFile);
                     noFileSelectedPane.setVisible(false);
                     unlockMenu();
-                    controller.executeScheduledTransactions(controller.getLedger());
+                    controller.executeScheduledTransactions();
                     try {
                         switchToTransactions();
                     } catch (IOException ioException) {

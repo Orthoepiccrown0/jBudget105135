@@ -2,7 +2,7 @@ package it.unicam.cs.pa.jbudget105135.utils;
 
 import it.unicam.cs.pa.jbudget105135.AccountType;
 import it.unicam.cs.pa.jbudget105135.MovementType;
-import it.unicam.cs.pa.jbudget105135.control.ModelController;
+import it.unicam.cs.pa.jbudget105135.control.Controller;
 import it.unicam.cs.pa.jbudget105135.model.*;
 import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITag;
@@ -29,6 +29,7 @@ public class ModelControllerTest extends TestCase {
         IMovement movement = new Movement("description", 1000, MovementType.CREDIT, movementTags,  transaction.getDate());
         transaction.addMovement(movement);
         ledger.addTransaction(transaction);
-        assertEquals(movement, ModelController.searchMovementsByTag(transaction.getMovements(),"mtag1").get(0));
+        Controller controller = new Controller(ledger, null);
+        assertEquals(movement, controller.searchMovementsByTag(transaction.getMovements(),"mtag1").get(0));
     }
 }

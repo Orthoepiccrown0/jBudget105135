@@ -1,9 +1,8 @@
 package it.unicam.cs.pa.jbudget105135.view;
 
 import it.unicam.cs.pa.jbudget105135.AccountType;
-import it.unicam.cs.pa.jbudget105135.control.ModelController;
+import it.unicam.cs.pa.jbudget105135.control.Controller;
 import it.unicam.cs.pa.jbudget105135.interfaces.IAccount;
-import it.unicam.cs.pa.jbudget105135.interfaces.IController;
 import it.unicam.cs.pa.jbudget105135.model.Account;
 import it.unicam.cs.pa.jbudget105135.model.Movement;
 import javafx.beans.value.ChangeListener;
@@ -34,7 +33,7 @@ public class AccountDialog implements Initializable {
     public Label balanceLabel;
     public Label errorMessage;
 
-    private IController controller;
+    private Controller controller;
 
     private Account account;
     private ArrayList<Movement> movements = new ArrayList<>();
@@ -75,7 +74,7 @@ public class AccountDialog implements Initializable {
         });
     }
 
-    public void setController(IController controller) {
+    public void setController(Controller controller) {
         this.controller = controller;
     }
 
@@ -92,7 +91,7 @@ public class AccountDialog implements Initializable {
     private void unpack() {
         openingBalanceField.setDisable(true);
         typeField.setDisable(true);
-        movements = (ArrayList<Movement>) ModelController.transformIMovements(account.getMovements());
+        movements = (ArrayList<Movement>) controller.transformIMovements(account.getMovements());
         setTableData();
         restoreFields();
     }
@@ -117,7 +116,7 @@ public class AccountDialog implements Initializable {
             } else {
                 account.setName(nameField.getText().trim());
                 account.setDescription(descriptionField.getText().trim());
-                ModelController.searchAccountAndReplaceIt(account, controller.getLedger());
+                controller.searchAccountAndReplaceIt(account);
             }
             close();
         }

@@ -1,8 +1,7 @@
 package it.unicam.cs.pa.jbudget105135.view;
 
 import it.unicam.cs.pa.jbudget105135.AccountType;
-import it.unicam.cs.pa.jbudget105135.control.ModelController;
-import it.unicam.cs.pa.jbudget105135.interfaces.IController;
+import it.unicam.cs.pa.jbudget105135.control.Controller;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITableView;
 import it.unicam.cs.pa.jbudget105135.model.Account;
 import javafx.fxml.FXMLLoader;
@@ -25,7 +24,7 @@ public class AccountsView implements Initializable, ITableView {
 
     private List<Account> accounts;
     private Account selectedAccount;
-    private IController controller;
+    private Controller controller;
 
     /**
      * Add action button
@@ -121,12 +120,12 @@ public class AccountsView implements Initializable, ITableView {
     }
 
     private void refreshTable() {
-        accounts = ModelController.transformIAccount(controller.getLedger().getAccounts());
+        accounts = controller.transformIAccount(controller.getLedger().getAccounts());
         table.getItems().clear();
         table.getItems().addAll(accounts);
     }
 
-    public void setController(IController controller) {
+    public void setController(Controller controller) {
         this.controller = controller;
         refreshTable();
     }

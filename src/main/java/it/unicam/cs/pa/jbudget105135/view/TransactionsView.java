@@ -1,7 +1,6 @@
 package it.unicam.cs.pa.jbudget105135.view;
 
-import it.unicam.cs.pa.jbudget105135.control.ModelController;
-import it.unicam.cs.pa.jbudget105135.interfaces.IController;
+import it.unicam.cs.pa.jbudget105135.control.Controller;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITableView;
 import it.unicam.cs.pa.jbudget105135.model.Transaction;
 import javafx.fxml.FXMLLoader;
@@ -25,7 +24,7 @@ public class TransactionsView implements Initializable, ITableView {
     private List<Transaction> transactions;
     private Transaction selectedTransaction;
 
-    private IController controller;
+    private Controller controller;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -48,7 +47,7 @@ public class TransactionsView implements Initializable, ITableView {
 
     public void deleteTransaction() {
         if (selectedTransaction != null) {
-            ModelController.searchTransactionDeleteIt(selectedTransaction, controller.getLedger());
+            controller.searchTransactionDeleteIt(selectedTransaction);
             refreshTable();
             controller.saveChanges();
         }
@@ -122,12 +121,12 @@ public class TransactionsView implements Initializable, ITableView {
     }
 
     private void refreshTable() {
-        transactions = ModelController.transformITransactions(controller.getLedger().getTransactions());
+        transactions = controller.transformITransactions(controller.getLedger().getTransactions());
         table.getItems().clear();
         table.getItems().addAll(transactions);
     }
 
-    public void setController(IController controller) {
+    public void setController(Controller controller) {
         this.controller = controller;
         refreshTable();
     }

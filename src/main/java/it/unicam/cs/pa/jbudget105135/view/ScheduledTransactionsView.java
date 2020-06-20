@@ -1,7 +1,6 @@
 package it.unicam.cs.pa.jbudget105135.view;
 
-import it.unicam.cs.pa.jbudget105135.control.ModelController;
-import it.unicam.cs.pa.jbudget105135.interfaces.IController;
+import it.unicam.cs.pa.jbudget105135.control.Controller;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITableView;
 import it.unicam.cs.pa.jbudget105135.model.ScheduledTransaction;
 import it.unicam.cs.pa.jbudget105135.model.Transaction;
@@ -25,7 +24,7 @@ public class ScheduledTransactionsView implements Initializable, ITableView {
     public TableView<ScheduledTransaction> table;
     public DatePicker dateField;
     public Button deleteButton;
-    private IController controller;
+    private Controller controller;
     private List<ScheduledTransaction> scheduledTransactions;
 
     /**
@@ -36,7 +35,7 @@ public class ScheduledTransactionsView implements Initializable, ITableView {
             return;
 
         List<ScheduledTransaction> transactions =
-                ModelController.searchScheduledTransactionByDate(scheduledTransactions, dateField.getValue());
+                controller.searchScheduledTransactionByDate(scheduledTransactions, dateField.getValue());
         if (transactions == null)
             return;
         table.getItems().clear();
@@ -103,7 +102,7 @@ public class ScheduledTransactionsView implements Initializable, ITableView {
     }
 
     private void refreshTable() {
-        scheduledTransactions = ModelController.transformIScheduled(controller.getLedger().getScheduledTransaction());
+        scheduledTransactions = controller.transformIScheduled(controller.getLedger().getScheduledTransaction());
         table.getItems().clear();
         table.getItems().addAll(scheduledTransactions);
     }
@@ -114,9 +113,9 @@ public class ScheduledTransactionsView implements Initializable, ITableView {
         deleteButton.setDisable(true);
     }
 
-    public void setController(IController controller) {
+    public void setController(Controller controller) {
         this.controller = controller;
-        this.scheduledTransactions = ModelController.transformIScheduled(controller.getLedger().getScheduledTransaction());
+        this.scheduledTransactions = controller.transformIScheduled(controller.getLedger().getScheduledTransaction());
         this.table.getItems().clear();
         this.table.getItems().addAll(scheduledTransactions);
     }

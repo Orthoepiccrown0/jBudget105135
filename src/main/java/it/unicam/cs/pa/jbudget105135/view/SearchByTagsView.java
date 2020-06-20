@@ -1,9 +1,8 @@
 package it.unicam.cs.pa.jbudget105135.view;
 
 import it.unicam.cs.pa.jbudget105135.MovementType;
-import it.unicam.cs.pa.jbudget105135.control.ModelController;
+import it.unicam.cs.pa.jbudget105135.control.Controller;
 import it.unicam.cs.pa.jbudget105135.interfaces.IAccount;
-import it.unicam.cs.pa.jbudget105135.interfaces.IController;
 import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
 import it.unicam.cs.pa.jbudget105135.interfaces.ITableView;
 import it.unicam.cs.pa.jbudget105135.model.Movement;
@@ -22,7 +21,7 @@ import java.util.ResourceBundle;
 public class SearchByTagsView implements Initializable, ITableView {
     public TextField searchField;
     public TableView<Movement> table;
-    private IController controller;
+    private Controller controller;
 
 
     @Override
@@ -36,9 +35,9 @@ public class SearchByTagsView implements Initializable, ITableView {
             for (IAccount account : controller.getLedger().getAccounts())
                 tmpMovements.addAll(account.getMovements());
 
-            List<IMovement> movementsContainingTags = ModelController.searchMovementsByTag(tmpMovements, searchField.getText().trim());
+            List<IMovement> movementsContainingTags = controller.searchMovementsByTag(tmpMovements, searchField.getText().trim());
             table.getItems().clear();
-            table.getItems().addAll(ModelController.transformIMovements(movementsContainingTags));
+            table.getItems().addAll(controller.transformIMovements(movementsContainingTags));
         }
     }
 
@@ -57,7 +56,7 @@ public class SearchByTagsView implements Initializable, ITableView {
         selectionModel.setSelectionMode(SelectionMode.SINGLE);
     }
 
-    public void setController(IController controller) {
+    public void setController(Controller controller) {
         this.controller = controller;
     }
 }
