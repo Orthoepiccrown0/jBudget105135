@@ -39,7 +39,6 @@ public class MovementDialog implements Initializable {
 
     private List<Movement> movements;
     private List<IAccount> accounts;
-    private Date date;
     private List<ITag> tagsList;
 
     //used to display details of already existing movement
@@ -82,7 +81,7 @@ public class MovementDialog implements Initializable {
     /**
      * List of movements used in transaction
      *
-     * @param movements
+     * @param movements list of movements
      */
     public void setMovements(List<Movement> movements) {
         this.movements = movements;
@@ -231,7 +230,7 @@ public class MovementDialog implements Initializable {
     }
 
     public void setDate(Date date) {
-        this.date = date;
+//        this.date = date;
         datePicker.setValue(date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
         datePicker.setDisable(true);
     }
@@ -241,7 +240,7 @@ public class MovementDialog implements Initializable {
         stage.close();
     }
 
-    public void cancelAction(ActionEvent actionEvent) {
+    public void cancelAction() {
         close();
     }
 }

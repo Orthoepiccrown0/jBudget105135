@@ -31,10 +31,6 @@ public class ScheduledTransaction implements IScheduledTransaction {
     /**
      * restore scheduled transaction
      *
-     * @param ID
-     * @param description
-     * @param transaction
-     * @param completed
      */
     public ScheduledTransaction(String ID, String description, ITransaction transaction, boolean completed) {
         this.ID = ID;

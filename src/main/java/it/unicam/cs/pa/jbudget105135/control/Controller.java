@@ -208,7 +208,7 @@ public class Controller implements IController {
      *
      * @param movements list of movements to search from
      * @param tags      tags to search for
-     * @return
+     * @return list of movements with selected tag
      */
     public List<IMovement> searchMovementsByTag(List<IMovement> movements, String... tags) {
         List<IMovement> movementsByTag = new ArrayList<>();

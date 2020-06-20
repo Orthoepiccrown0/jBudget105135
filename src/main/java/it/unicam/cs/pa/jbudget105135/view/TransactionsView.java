@@ -65,7 +65,11 @@ public class TransactionsView implements Initializable, ITableView {
         column4.setCellValueFactory(new PropertyValueFactory<>("localDate"));
         TableColumn<Transaction, String> column5 = new TableColumn<>("Tags");
         column5.setCellValueFactory(new PropertyValueFactory<>("tagsString"));
-        table.getColumns().addAll(column1, column2, column3, column4, column5);
+        table.getColumns().add(column1);
+        table.getColumns().add(column2);
+        table.getColumns().add(column3);
+        table.getColumns().add(column4);
+        table.getColumns().add(column5);
         TableView.TableViewSelectionModel<Transaction> selectionModel = table.getSelectionModel();
         selectionModel.setSelectionMode(SelectionMode.SINGLE);
         setTransactionClickListeners();

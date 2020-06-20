@@ -1,6 +1,7 @@
 package it.unicam.cs.pa.jbudget105135.view;
 
 import it.unicam.cs.pa.jbudget105135.AccountType;
+import it.unicam.cs.pa.jbudget105135.MovementType;
 import it.unicam.cs.pa.jbudget105135.control.Controller;
 import it.unicam.cs.pa.jbudget105135.interfaces.IAccount;
 import it.unicam.cs.pa.jbudget105135.model.Account;
@@ -55,21 +56,19 @@ public class AccountDialog implements Initializable {
         column1.setCellValueFactory(new PropertyValueFactory<>("description"));
         TableColumn<Movement, Double> column2 = new TableColumn<>("Amount");
         column2.setCellValueFactory(new PropertyValueFactory<>("amount"));
-        TableColumn<Movement, Double> column3 = new TableColumn<>("Type");
+        TableColumn<Movement, MovementType> column3 = new TableColumn<>("Type");
         column3.setCellValueFactory(new PropertyValueFactory<>("type"));
-        movementsTable.getColumns().addAll(column1, column2, column3);
+        movementsTable.getColumns().add(column1);
+        movementsTable.getColumns().add(column2);
+        movementsTable.getColumns().add(column3);
         TableView.TableViewSelectionModel<Movement> selectionModel = movementsTable.getSelectionModel();
         selectionModel.setSelectionMode(SelectionMode.SINGLE);
     }
 
     private void forceNumericInputOnBalance() {
-        openingBalanceField.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                String newValue) {
-                if (!newValue.matches("\\d{0,7}([\\.]\\d{0,4})?")) {
-                    openingBalanceField.setText(oldValue);
-                }
+        openingBalanceField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d{0,7}([\\.]\\d{0,4})?")) {
+                openingBalanceField.setText(oldValue);
             }
         });
     }
@@ -109,7 +108,7 @@ public class AccountDialog implements Initializable {
         movementsTable.getItems().addAll(movements);
     }
 
-    public void submitAction(ActionEvent actionEvent) {
+    public void submitAction() {
         if (isValidAccount()) {
             if (account == null) {
                 createNewAccount();
@@ -170,7 +169,7 @@ public class AccountDialog implements Initializable {
         errorMessage.setText(msg);
     }
 
-    public void cancelAction(ActionEvent actionEvent) {
+    public void cancelAction() {
         close();
     }
 }

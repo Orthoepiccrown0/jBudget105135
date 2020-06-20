@@ -51,7 +51,10 @@ public class SearchByTagsView implements Initializable, ITableView {
         column3.setCellValueFactory(new PropertyValueFactory<>("type"));
         TableColumn<Movement, String> column4 = new TableColumn<>("Tags");
         column4.setCellValueFactory(new PropertyValueFactory<>("tagsString"));
-        table.getColumns().addAll(column1, column2, column3, column4);
+        table.getColumns().add(column1);
+        table.getColumns().add(column2);
+        table.getColumns().add(column3);
+        table.getColumns().add(column4);
         TableView.TableViewSelectionModel<Movement> selectionModel = table.getSelectionModel();
         selectionModel.setSelectionMode(SelectionMode.SINGLE);
     }

@@ -57,7 +57,9 @@ public class ScheduledTransactionsView implements Initializable, ITableView {
         TableColumn<ScheduledTransaction, LocalDate> column3 = new TableColumn<>("Date");
         column3.setCellValueFactory(new PropertyValueFactory<>("date"));
         column1.setMinWidth(100);
-        table.getColumns().addAll(column1, column2, column3);
+        table.getColumns().add(column1);
+        table.getColumns().add(column2);
+        table.getColumns().add(column3);
         TableView.TableViewSelectionModel<ScheduledTransaction> selectionModel = table.getSelectionModel();
         selectionModel.setSelectionMode(SelectionMode.SINGLE);
         setScheduledTransactionsTableClickListeners();

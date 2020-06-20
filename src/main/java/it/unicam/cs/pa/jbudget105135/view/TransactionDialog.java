@@ -1,5 +1,6 @@
 package it.unicam.cs.pa.jbudget105135.view;
 
+import it.unicam.cs.pa.jbudget105135.MovementType;
 import it.unicam.cs.pa.jbudget105135.control.Controller;
 import it.unicam.cs.pa.jbudget105135.interfaces.IAccount;
 import it.unicam.cs.pa.jbudget105135.interfaces.IMovement;
@@ -83,7 +84,7 @@ public class TransactionDialog implements Initializable {
         movementsTable.getItems().addAll(movements);
     }
 
-    public void deleteMovement(ActionEvent actionEvent) {
+    public void deleteMovement() {
         //future implementation
     }
 
@@ -170,7 +171,7 @@ public class TransactionDialog implements Initializable {
         return Date.from(instant);
     }
 
-    public void cancel(ActionEvent actionEvent) {
+    public void cancel() {
         close();
     }
 
@@ -233,11 +234,14 @@ public class TransactionDialog implements Initializable {
         column1.setCellValueFactory(new PropertyValueFactory<>("description"));
         TableColumn<Movement, Double> column2 = new TableColumn<>("Amount");
         column2.setCellValueFactory(new PropertyValueFactory<>("amount"));
-        TableColumn<Movement, Double> column3 = new TableColumn<>("Type");
+        TableColumn<Movement, MovementType> column3 = new TableColumn<>("Type");
         column3.setCellValueFactory(new PropertyValueFactory<>("type"));
         TableColumn<Movement, Date> column4 = new TableColumn<>("Tags");
         column4.setCellValueFactory(new PropertyValueFactory<>("tagsString"));
-        movementsTable.getColumns().addAll(column1, column2, column3, column4);
+        movementsTable.getColumns().add(column1);
+        movementsTable.getColumns().add(column2);
+        movementsTable.getColumns().add(column3);
+        movementsTable.getColumns().add(column4);
         TableView.TableViewSelectionModel<Movement> selectionModel = movementsTable.getSelectionModel();
         selectionModel.setSelectionMode(SelectionMode.SINGLE);
     }
